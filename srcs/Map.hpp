@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MAP_HPP
+#define MAP_HPP
 
 #include <memory>
 
@@ -28,3 +29,5 @@ namespace ft {
 		value_type	*arr;
 	};
 }
+
+#endif

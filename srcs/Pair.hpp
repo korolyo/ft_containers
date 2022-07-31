@@ -1,7 +1,8 @@
 //
 // Created by Atom Collin on 7/5/22.
 //
-#pragma once
+#ifndef PAIR_HPP
+#define PAIR_HPP
 
 namespace ft {
 	template<
@@ -94,3 +95,8 @@ namespace ft {
 		;
 	}
 }
+
+template< class T1, class T2 >
+std::pair<T1,T2> make_pair( T1 t, T2 u );
+
+#endif

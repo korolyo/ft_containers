@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SET_HPP
+#define SET_HPP
 
 #include <memory>
 
@@ -25,3 +26,5 @@ namespace ft {
 		value_type	*arr;
 	};
 }
+
+#endif

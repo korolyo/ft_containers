@@ -2,7 +2,8 @@
 // Created by Atom Collin on 7/5/22.
 //
 
-#pragma once
+#ifndef UTILS_HPP
+#define UTILS_HPP
 
 namespace ft {
 	template<bool B, class T = void>
@@ -10,6 +11,9 @@ namespace ft {
 
 	template<class T>
 	struct enable_if<true, T> { typedef T type; };
+
+	template< class T >
+	struct is_integral
 
 	template<class InputIt1, class InputIt2>
 	bool lexicographical_compare(InputIt1 first1, InputIt1 last1,
@@ -58,3 +62,5 @@ namespace ft {
 		return true;
 	}
 }
+
+#endif

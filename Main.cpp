@@ -38,11 +38,11 @@
 //	~MutantStack() {}
 //
 //	typedef typename ft::stack<T>::container_type::iterator iterator;
-//
+
 //	iterator begin() { return this->c.begin(); }
 //	iterator end() { return this->c.end(); }
 //};
-//
+
 //int main(int argc, char** argv) {
 //	if (argc != 2)
 //	{
@@ -84,9 +84,9 @@
 //	}
 //	catch(const std::exception& e)
 //	{
-//		//NORMAL ! :P
+//		NORMAL ! :P
 //	}
-//
+
 //	for (int i = 0; i < COUNT; ++i)
 //	{
 //		map_int.insert(ft::make_pair(rand(), rand()));
@@ -112,19 +112,45 @@
 //	}
 //	std::cout << std::endl;
 //	return (0);
-//}
+//};
 
 #include <iostream>
 #include <vector>
+//#include "srcs/Vector.hpp"
 
-int main(void) {
+void print(int n) {
+	std::cout << " " << n;
+}
+
+int main() {
 	std::vector<int> v;
-//	ft::vector<int> v_c(15);
+	std::vector<int> q;
 
-	for (int i = 0; i < 10; ++i) {
-		v.push_back(i);
-		std::cout << v.size();
-		std::cout << v.capacity() << std::endl;
+	v.push_back(1);
+	v.push_back(2);
+	v.push_back(3);
 
-	}
+	q.push_back(55);
+	q.push_back(66);
+	q.push_back(77);
+	q.push_back(345);
+
+	v.swap(q);
+
+	std::cout << "v:\n";
+	std::for_each(v.begin(), v.end(), print);
+	std::cout << "\nq:\n";
+	std::for_each(q.begin(), q.end(), print);
+	std::cout << "\n";
+
+	std::cout << v.size() << std::endl;
+	std::cout << v.capacity() << std::endl;
+
+	std::cout << q.size() << std::endl;
+	std::cout << q.capacity() << std::endl;
+
+//	ft::Vector<int> ve(10);
+
+//	std::cout << ve.size() << std::endl;
+//	std::cout << ve.capacity() << std::endl;
 }
