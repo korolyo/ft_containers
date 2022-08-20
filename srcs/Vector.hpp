@@ -19,10 +19,10 @@ namespace ft
 		typedef const value_type&								const_reference;
 		typedef typename Allocator::pointer						pointer;
 		typedef typename Allocator::const_pointer				const_pointer;
-//		typedef typename ft::random_access_iterator::			iterator;
-//		typedef typename ft::random_access_iterator				const_iterator;
-//		typedef typename ft::Reverse_iterator<iterator>			reverse_iterator;
-//		typedef typename ft::Reverse_iterator<const_iterator>	const_reverse_iterator;
+		typedef typename ft::random_access_iterator::			iterator;
+		typedef typename ft::random_access_iterator				const_iterator;
+		typedef typename ft::Reverse_iterator<iterator>			reverse_iterator;
+		typedef typename ft::Reverse_iterator<const_iterator>	const_reverse_iterator;
 
 	private:
 		value_type	*arr;
@@ -46,7 +46,7 @@ namespace ft
 
 		explicit Vector( size_type count,
 						 const T& value = T(),
-						 const Allocator& alloc = Allocator()) {
+						 const Allocator& alloc = Allocator() ) {
 			sz = count;
 			this->alloc = alloc;
 		}
@@ -61,8 +61,8 @@ namespace ft
 		~Vector() {
 			while (sz > 0)
 			{
-				(arr + sz)->~T();
-				sz--;
+                sz--;
+                alloc.destroy(arr + sz);
 			}
 			alloc.deallocate(arr, cap);
 		}
@@ -190,11 +190,12 @@ namespace ft
 			if (new_cap <= cap) {
 				return ;
 			}
+
 			T* newarr = std::reinterpret_pointer_cast<T*>(new int8_t[n * sizeof(T)]);
+
 			for (size_t i = 0; i < sz; i++) {
 				new (newarr + i) T(arr[i]);
 			}
-
 		}
 
 		size_type capacity() const {
@@ -205,7 +206,7 @@ namespace ft
 
 		void clear() { //TODO: Check this!!
 			for (; sz >= 0; --sz) {
-				(arr + sz)->~T();
+                this->alloc.destroy(arr + sz);
 			}
 		}
 
@@ -235,13 +236,13 @@ namespace ft
 		void push_back(const T& value) {
 			if (cap == sz)
 				reserve(2 * sz);
-			new (arr + sz) T(value);
+            alloc.construct(arr + sz, value);
 			++sz;
 		}
 
 		void pop_back() {
 			--sz;
-			(arr + sz)->~T();
+            alloc.destroy(arr + sz);
 		}
 
 		void resize( size_type count ) {
@@ -249,7 +250,7 @@ namespace ft
 				reserve(count);
 			}
 			for (int i = 0; i < count; i++) {
-				arr[i]->T();
+				this->alloc.construct(arr + i);
 			}
 		}
 

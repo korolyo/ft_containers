@@ -1,7 +1,3 @@
-//
-// Created by Atom Collin on 7/5/22.
-//
-
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
@@ -13,7 +9,10 @@ namespace ft {
 	struct enable_if<true, T> { typedef T type; };
 
 	template< class T >
-	struct is_integral
+	struct is_integral {
+        static bool VALUE;
+
+    };
 
 	template<class InputIt1, class InputIt2>
 	bool lexicographical_compare(InputIt1 first1, InputIt1 last1,
