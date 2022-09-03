@@ -6,12 +6,12 @@ namespace ft {
 	struct enable_if {};
 
 	template<class T>
-	struct enable_if<true, T> { typedef T type; };
+	struct enable_if<true, T> {
+		using type = T;
+	};
 
 	template< class T >
 	struct is_integral {
-        static bool VALUE;
-
     };
 
 	template<class InputIt1, class InputIt2>

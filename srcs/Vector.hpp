@@ -255,8 +255,11 @@ namespace ft
 		}
 
 		void resize( size_type count, T value = T() ) {
+			if (count > cap) {
+				reserve(count);
+			}
 			for (int i = 0; i < count; i++) {
-				arr[i]->value;
+				alloc.construct(arr + i);
 			}
 			if (count < sz) {
 				sz = count;
