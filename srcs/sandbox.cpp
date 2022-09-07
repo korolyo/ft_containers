@@ -3,8 +3,19 @@
 //
 
 #include <Vector>
+#include "Vector.hpp"
+#include "Random_access_iterator.hpp"
+#include "Iterator_traits.hpp"
+#include <iostream>
 
 int main(void) {
-	Vector<String> vector = new Vector<>();
+	std::vector<std::string> vector;
 	vector.capacity();
+    vector.push_back("Yo");
+    vector.begin();
+
+    ft::Vector<std::string> myVec;
+    myVec.push_back("yoMan");
+
+    std::cout << myVec.at(0) << std::endl;
 }

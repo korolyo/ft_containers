@@ -4,19 +4,20 @@
 #include <memory>
 
 namespace ft {
+
 	template<typename Itr>
-	class reverse_iterator {
+	struct Reverse_iterator {
 		Itr itr;
 	public:
-		constexpr explicit reverse_iterator(Itr itr): itr(itr) {}
-		constexpr auto& operator*() {
+		explicit Reverse_iterator(Itr itr): itr(itr) {}
+		auto& operator*() {
 			return *std::prev(itr); // <== returns the content of prev
 		}
-		constexpr auto& operator++() {
+		auto& operator++() {
 			--itr;
 			return *this;
 		}
-		constexpr friend bool operator!=(reverse_iterator<Itr> a, reverse_iterator<Itr> b) {
+		friend bool operator!=(Reverse_iterator<Itr> a, Reverse_iterator<Itr> b) {
 			return a.itr != b.itr;
 		}
 	};

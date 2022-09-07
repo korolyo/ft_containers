@@ -3,6 +3,9 @@
 
 #include <iostream>
 #include <memory>
+#include "Random_access_iterator.hpp"
+#include "Iterator_traits.hpp"
+#include "Reverse_iterator.hpp"
 
 namespace ft
 {
@@ -19,8 +22,8 @@ namespace ft
 		typedef const value_type&								const_reference;
 		typedef typename Allocator::pointer						pointer;
 		typedef typename Allocator::const_pointer				const_pointer;
-		typedef typename ft::random_access_iterator::			iterator;
-		typedef typename ft::random_access_iterator				const_iterator;
+		typedef typename ft::Random_access_iterator<T>		    iterator;
+		typedef typename ft::Random_access_iterator<T>		    const_iterator;
 		typedef typename ft::Reverse_iterator<iterator>			reverse_iterator;
 		typedef typename ft::Reverse_iterator<const_iterator>	const_reverse_iterator;
 
@@ -191,10 +194,10 @@ namespace ft
 				return ;
 			}
 
-			T* newarr = std::reinterpret_pointer_cast<T*>(new int8_t[n * sizeof(T)]);
+			T* newarr = alloc.allocate(new_cap);
 
 			for (size_t i = 0; i < sz; i++) {
-				new (newarr + i) T(arr[i]);
+                alloc.construct( newarr + i, arr[i]);
 			}
 		}
 
@@ -210,28 +213,28 @@ namespace ft
 			}
 		}
 
-//		iterator insert( iterator pos, const T& value ) {
-//			;
-//		}
-//
-//		void insert( iterator pos, size_type count, const T& value ) {
-//			;
-//		}
-//
-//		template< class InputIt >
-//		void insert( iterator pos,
-//					 InputIt first,
-//					 InputIt Last) {
-//			;
-//		}
-//
-//		iterator erase( iterator pos ) {
-//			;
-//		}
-//
-//		iterator erase( iterator first, iterator last ) {
-//			;
-//		}
+		iterator insert( iterator pos, const T& value ) {
+			;
+		}
+
+		void insert( iterator pos, size_type count, const T& value ) {
+			;
+		}
+
+		template< class InputIt >
+		void insert( iterator pos,
+					 InputIt first,
+					 InputIt Last) {
+			;
+		}
+
+		iterator erase( iterator pos ) {
+			;
+		}
+
+		iterator erase( iterator first, iterator last ) {
+			;
+		}
 
 		void push_back(const T& value) {
 			if (cap == sz)
@@ -272,29 +275,29 @@ namespace ft
 			other->arr = tmparr;
 		}
 
-//		template<class T, class Alloc>
-//		friend bool operator!=(const Vector<T,Allocator>& lhs,
-//						const Vector<T,Allocator>& rhs);
-//
-//		template<class T, class Alloc>
-//		friend bool operator==(const Vector<T,Allocator>& lhs,
-//						const Vector<T,Allocator>& rhs);
-//
-//		template<class T, class Alloc>
-//		friend bool operator<(const Vector<T,Allocator>& lhs,
-//					   const Vector<T,Allocator>& rhs);
-//
-//		template<class T, class Alloc>
-//		friend bool operator<=(const Vector<T,Allocator>& lhs,
-//						const Vector<T,Allocator>& rhs);
-//
-//		template<class T, class Alloc>
-//		friend bool operator>(const Vector<T,Allocator>& lhs,
-//					   const Vector<T,Allocator>& rhs);
-//
-//		template<class T, class Alloc>
-//		friend bool operator>=(const Vector<T,Allocator>& lhs,
-//						const Vector<T,Allocator>& rhs);
+		template<class T, class Alloc>
+		friend bool operator!=(const Vector<T,Allocator>& lhs,
+						const Vector<T,Allocator>& rhs);
+
+		template<class T, class Alloc>
+		friend bool operator==(const Vector<T,Allocator>& lhs,
+						const Vector<T,Allocator>& rhs);
+
+		template<class T, class Alloc>
+		friend bool operator<(const Vector<T,Allocator>& lhs,
+					   const Vector<T,Allocator>& rhs);
+
+		template<class T, class Alloc>
+		friend bool operator<=(const Vector<T,Allocator>& lhs,
+						const Vector<T,Allocator>& rhs);
+
+		template<class T, class Alloc>
+		friend bool operator>(const Vector<T,Allocator>& lhs,
+					   const Vector<T,Allocator>& rhs);
+
+		template<class T, class Alloc>
+		friend bool operator>=(const Vector<T,Allocator>& lhs,
+						const Vector<T,Allocator>& rhs);
 	};
 
 	template<typename T, class Alloc>
@@ -333,7 +336,7 @@ namespace ft
 
 	}
 
-	template<T,Allocator>
+	template<T, std::Allocator>
 	void swap( ft::Vector<T,Allocator>& lhs,
 			   ft::Vector<T,Allocator>& rhs ) {
 		ft::Vector<T,Allocator> tmp;
