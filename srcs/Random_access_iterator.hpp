@@ -14,7 +14,6 @@ namespace ft {
         typedef typename ft::Iterator_traits<It>::pointer             pointer;
         typedef typename ft::Iterator_traits<It>::reference           reference;
 
-
         It itr;
 
         bool operator!=(It &it) {
