@@ -116,38 +116,38 @@
 
 #include <iostream>
 #include <vector>
-//#include "srcs/Vector.hpp"
+#include "srcs/Vector.hpp"
+
 
 void print(int n) {
 	std::cout << " " << n;
 }
 
 int main() {
-	std::vector<int> v;
-	std::vector<int> q;
+	std::vector<int> original;
+	ft::Vector<int> myVector;
 
-	v.push_back(1);
-	v.push_back(2);
-	v.push_back(3);
+    original.push_back(1);
+    original.push_back(2);
+    original.push_back(3);
 
-	q.push_back(55);
-	q.push_back(66);
-	q.push_back(77);
-	q.push_back(345);
+    myVector.push_back(1);
+    myVector.push_back(2);
+    myVector.push_back(3);
 
-	v.swap(q);
-
-	std::cout << "v:\n";
-	std::for_each(v.begin(), v.end(), print);
-	std::cout << "\nq:\n";
-	std::for_each(q.begin(), q.end(), print);
+	std::cout << "Original:\n";
+	std::for_each(original.begin(), original.end(), print);
+	std::cout << "\nMyVector:\n";
+	std::for_each(myVector.begin(), myVector.end(), print);
 	std::cout << "\n";
 
-	std::cout << v.size() << std::endl;
-	std::cout << v.capacity() << std::endl;
+    std::cout << "Original size/ capacity:\n";
+	std::cout << original.size() << std::endl;
+	std::cout << original.capacity() << std::endl;
 
-	std::cout << q.size() << std::endl;
-	std::cout << q.capacity() << std::endl;
+    std::cout << "\nMyVector size/ capacity:\n";
+	std::cout << myVector.size() << std::endl;
+	std::cout << myVector.capacity() << std::endl;
 
 //	ft::Vector<int> ve(10);
 
