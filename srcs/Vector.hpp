@@ -218,7 +218,7 @@ namespace ft
 			if (pos > this->cap)
                 reserve(pos);
             ft::Random_access_iterator<T>
-            return
+            return ;
 		}
 
 		void insert( iterator pos, size_type count, const T& value ) {
