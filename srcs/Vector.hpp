@@ -208,10 +208,8 @@ namespace ft
 
 		//Modyfiers
 
-		void clear() { //TODO: Check this!!
-			for (; sz >= 0; --sz) {
-                this->alloc.destroy(arr + sz);
-			}
+		void clear() {
+			erase(begin(), end());
 		}
 
 		iterator insert( iterator pos, const T& value ) {
@@ -285,7 +283,7 @@ namespace ft
 	bool operator==(const Vector<T, Alloc>& lhs,
 					const Vector<T, Alloc>& rhs) {
 		const typename Vector<T, Alloc>::size_type sz = lhs.size();
-		return sz == rhs.size() && std::equal(lhs.begin(), lhs.end(), rhs.begin());
+		return lhs.size() == rhs.size() && std::equal(lhs.begin(), lhs.end(), rhs.begin());
 	}
 
 	template<typename T, class Alloc>

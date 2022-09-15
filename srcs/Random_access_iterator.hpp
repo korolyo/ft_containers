@@ -7,7 +7,8 @@
 namespace ft {
 
     template<typename T>
-	struct Random_access_iterator {
+	struct Random_access_iterator
+            : std::iterator<std::random_access_iterator_tag> {
         typedef typename ft::Iterator_traits<It>::iterator_category   random_access_iterator_tag;
         typedef typename ft::Iterator_traits<It>::value_type          value_type;
         typedef typename ft::Iterator_traits<It>::difference_type     difference_type;
