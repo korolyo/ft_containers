@@ -9,11 +9,11 @@ namespace ft {
     template<typename T>
 	struct Random_access_iterator
             : std::iterator<std::random_access_iterator_tag> {
-        typedef typename ft::Iterator_traits<It>::iterator_category   random_access_iterator_tag;
-        typedef typename ft::Iterator_traits<It>::value_type          value_type;
-        typedef typename ft::Iterator_traits<It>::difference_type     difference_type;
-        typedef typename ft::Iterator_traits<It>::pointer             pointer;
-        typedef typename ft::Iterator_traits<It>::reference           reference;
+        typedef std::random_access_iterator_tag iterator_category;
+        typedef std::ptrdiff_t                  difference_type;
+        typedef T                               value_type;
+        typedef const T*                        pointer;
+        typedef const T&                        reference;
 
         It itr;
 
