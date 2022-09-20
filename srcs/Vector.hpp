@@ -29,58 +29,68 @@ namespace ft
 		typedef typename ft::Reverse_iterator<const_iterator>			const_reverse_iterator;
 
 	private:
-		value_type	*arr;
-		size_type	sz;
-		size_type	cap;
-		Allocator	alloc;
+		value_type	*_arr;
+		size_type	_sz;
+		size_type	_cap;
+		Allocator	_alloc;
 
 	public:
 		// Member functions
 		Vector() {
-			sz = 0;
-			cap = 0;
-			alloc = Allocator();
+			_sz = 0;
+			_cap = 0;
+			_alloc = Allocator();
 		}
 
 		explicit Vector( const Allocator& alloc ) {
-			this->alloc = Allocator( alloc );
-			cap = 0;
-			sz = 0;
+			this->_alloc = Allocator( alloc );
+			_cap = 0;
+			_sz = 0;
 		}
 
 		explicit Vector( size_type count,
 						 const T& value = T(),
 						 const Allocator& alloc = Allocator() ) {
-			sz = count;
-			this->alloc = alloc;
+			_sz = count;
+			this->_alloc = alloc;
 		}
 
 		template< class InputIt >
 		Vector( InputIt first, InputIt last,
 				const Allocator& alloc = Allocator() ) {
-			this->sz = last - first;
-			this->alloc = alloc;
+			this->_sz = last - first;
+			this->_alloc = alloc;
 		}
 
 		~Vector() {
-			while (sz > 0)
+			while (_sz > 0)
 			{
-                sz--;
-                alloc.destroy(arr + sz);
+                _sz--;
+                _alloc.destroy(_arr + _sz);
 			}
-			alloc.deallocate(arr, cap);
+			_alloc.deallocate(_arr, _cap);
 		}
 
 		Vector( const Vector& other ) {
 			int i = 0;
 
-			while (i < other->sz) {
-				this->arr[i] = other->arr[i];
+			while (i < other->_sz) {
+				this->_arr[i] = other->_arr[i];
 			}
 		}
 
 		Vector& operator=( const Vector& other ) {
-			;
+			if (&other != this) {
+                _sz = other._sz;
+                _alloc.deallocate(_arr, _cap);
+                _cap = other._cap;
+                _arr = _alloc.allocate(_cap);
+
+                for (size_type i = 0; i < _sz; i++) {
+                    _alloc.construct(_arr + i, other[i]);
+                }
+            }
+            return *this;
 		}
 
 		void assign( size_type count, const T& value ) {
@@ -93,97 +103,97 @@ namespace ft
 		}
 
 		allocator_type get_allocator() const {
-			return this->alloc;
+			return this->_alloc;
 		}
 
 		// Element access
 
 		reference at( size_type pos ) {
-			if (pos >= sz)
+			if (pos >= _sz)
 				throw std::out_of_range("Out of range");
-			return arr[pos];
+			return _arr[pos];
 		}
 
 		const_reference at( size_type pos ) const {
-			if (pos >= sz)
+			if (pos >= _sz)
 				throw std::out_of_range("Out of range");
-			return arr[pos];;
+			return _arr[pos];;
 		}
 
 		reference operator[]( size_type pos ) {
-			return arr[pos];
+			return _arr[pos];
 		}
 
 		const_reference operator[]( size_type pos ) const {
-			return arr[pos];
+			return _arr[pos];
 		}
 
 		reference front() {
-			return arr[0];
+			return _arr[0];
 		}
 
 		const_reference front() const {
-			return arr[0];
+			return _arr[0];
 		}
 
 		reference back() {
-			return arr[sz - 1];
+			return _arr[_sz - 1];
 		}
 
 		const_reference back() const {
-			return arr[sz - 1];
+			return _arr[_sz - 1];
 		}
 
 		T* data() {
-			return arr;
+			return _arr;
 		}
 
 		const T* data() const {
-			return arr;
+			return _arr;
 		}
 
 		//Iterators
 
 		iterator begin() {
-			return iterator(arr[0]);
+			return &_arr[0];
 		}
 
 		const_iterator begin() const {
-			return const_iterator(arr[0]);
+			return &_arr[0];
 		}
 
 		iterator end() {
-			return iterator(arr[sz - 1]);
+			return &_arr[_sz];
 		}
 
 		const_iterator end() const {
-			return const_iterator(arr[sz - 1]);
+			return &_arr[_sz];
 		}
 
 		reverse_iterator rbegin() {
-			return reverse_iterator(arr[sz - 1]);
+			return reverse_iterator(end());
 		}
 
 		const_reverse_iterator rbegin() const {
-			return const_reverse_iterator(arr[sz - 1]);
+			return reverse_iterator(end());
 		}
 
 		reverse_iterator rend() {
-			return reverse_iterator(arr[0]);
+			return reverse_iterator(begin());
 		}
 
 		const_reverse_iterator rend() const {
-			return const_reverse_iterator(arr[0]);
+			return reverse_iterator(begin());
 		}
 
 		//Capacity
 
 		bool empty() const {
-			return sz;
+			return _sz;
 		}
 
 		size_type size() const {
-			return this->sz;
+			return this->_sz;
 		}
 
 		size_type max_size() const {
@@ -191,19 +201,19 @@ namespace ft
 		}
 
 		void reserve( size_type new_cap ) {
-			if (new_cap <= cap) {
+			if (new_cap <= _cap) {
 				return ;
 			}
 
-			T* newarr = alloc.allocate(new_cap);
+			T* newarr = _alloc.allocate(new_cap);
 
 			for (size_t i = 0; i < sz; i++) {
-                alloc.construct( newarr + i, arr[i]);
+                _alloc.construct( newarr + i, _arr[i]);
 			}
 		}
 
 		size_type capacity() const {
-			return this->cap;
+			return this->_cap;
 		}
 
 		//Modyfiers
@@ -213,7 +223,7 @@ namespace ft
 		}
 
 		iterator insert( iterator pos, const T& value ) {
-			if (pos > this->cap)
+			if (pos > this->_cap)
                 reserve(pos);
             ft::Random_access_iterator<T>
             return iterator;
@@ -239,44 +249,43 @@ namespace ft
 		}
 
 		void push_back(const T& value) {
-			if (cap == sz)
-				reserve(2 * sz);
-            alloc.construct(arr + sz, value);
-			++sz;
+			if (_cap == _sz)
+				reserve(2 * _sz);
+            _alloc.construct(_arr + _sz, value);
+			++_sz;
 		}
 
 		void pop_back() {
-			--sz;
-            alloc.destroy(arr + sz);
+			--_sz;
+            _alloc.destroy(_arr + _sz);
 		}
 
 		void resize( size_type count ) {
-			if (count > cap) {
+			if (count > _cap) {
 				reserve(count);
 			}
 			for (int i = 0; i < count; i++) {
-				this->alloc.construct(arr + i);
+				this->_alloc.construct(_arr + i);
 			}
 		}
 
 		void resize( size_type count, T value = T() ) {
-			if (count > cap) {
+			if (count > _cap) {
 				reserve(count);
 			}
 			for (int i = 0; i < count; i++) {
-				alloc.construct(arr + i);
+				_alloc.construct(_arr + i);
 			}
-			if (count < sz) {
-				sz = count;
+			if (count < _sz) {
+				_sz = count;
 			}
 		}
 
 		void swap( Vector &other ) {
-			T* tmparr = this->arr;
-			this->arr = other->arr;
-			other->arr = tmparr;
+			T* tmparr = this->_arr;
+			this->_arr = other->_arr;
+			other->_arr = tmparr;
 		}
-
 	};
 
 	template<typename T, class Alloc>
