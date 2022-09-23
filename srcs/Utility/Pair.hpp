@@ -12,6 +12,7 @@ namespace ft {
 	private:
 		T1	first;
 		T2	second;
+
 	public:
 		Pair() { }
 
