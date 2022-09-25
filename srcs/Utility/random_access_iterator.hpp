@@ -2,7 +2,7 @@
 #define RANDOM_ACCESS_ITERATOR_HPP
 
 #include <memory>
-#include "Iterator_traits.hpp"
+#include "iterator_traits.hpp"
 
 namespace ft {
 
