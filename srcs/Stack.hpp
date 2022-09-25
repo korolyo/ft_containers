@@ -2,12 +2,13 @@
 #define STACK_HPP
 
 #include <iostream>
-#include <vector>
+#include <Vector.hpp>
+#include <
 
 namespace ft {
 	template<
 	        class T,
-			class Container = std::vector<T>
+			class Container = ft::Vector<T>
 	> class Stack {
 		typedef Container								container_type;
 		typedef typename Container::value_type			value_type;
@@ -16,15 +17,9 @@ namespace ft {
 		typedef typename Container::const_reference		const_reference;
 	public:
 
-		explicit Stack( const Container& cont = Container() ) { }
-
-		Stack( const Stack& other ) {
-			*this = other;
-		}
-
-		~Stack() { }
-
-		Stack& operator=( const Stack& other) { }
+		explicit Stack( const Container& cont = Container() ) {
+            c = cont;
+        }
 
 		reference top() {
 			return c.back();
@@ -74,7 +69,6 @@ namespace ft {
 		friend bool operator<=( const ft::Stack<T,Container>& lhs,
 								const ft::Stack<T,Container>& rhs );
 
-
 	private:
 		Container c;
 	};
@@ -83,42 +77,42 @@ namespace ft {
 	bool operator==( const ft::Stack<T,Container>& lhs,
 							const ft::Stack<T,Container>& rhs )
 	{
-		;
+		return lhs.c == rhs.c;
 	}
 
 	template< class T, class Container >
 	bool operator!=( const ft::Stack<T,Container>& lhs,
 					 const ft::Stack<T,Container>& rhs )
 	{
-		;
+        return lhs.c != rhs.c;
 	}
 
 	template< class T, class Container >
 	bool operator>( const ft::Stack<T,Container>& lhs,
 					 const ft::Stack<T,Container>& rhs )
 	{
-		;
+        return lhs.c > rhs.c;
 	}
 
 	template< class T, class Container >
 	bool operator>=( const ft::Stack<T,Container>& lhs,
 					 const ft::Stack<T,Container>& rhs )
 	{
-		;
+        return lhs.c >= rhs.c;
 	}
 
 	template< class T, class Container >
 	bool operator<( const ft::Stack<T,Container>& lhs,
 					 const ft::Stack<T,Container>& rhs )
 	{
-		;
+        return lhs.c < rhs.c;
 	}
 
 	template< class T, class Container >
 	bool operator<=( const ft::Stack<T,Container>& lhs,
 					 const ft::Stack<T,Container>& rhs )
 	{
-		;
+        return lhs.c <= rhs.c;
 	}
 }
 

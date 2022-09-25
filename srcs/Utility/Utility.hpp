@@ -1,7 +1,5 @@
 #ifndef UTILS_HPP
-#define UTILS_HPP
-
-#include
+# define UTILS_HPP
 
 namespace ft {
 	template<bool B, class T = void>
@@ -11,10 +9,6 @@ namespace ft {
 	struct enable_if<true, T> {
 		using type = T;
 	};
-
-	template< class T >
-	struct is_integral {
-    };
 
 	template<class InputIt1, class InputIt2>
 	bool lexicographical_compare(InputIt1 first1, InputIt1 last1,
@@ -44,7 +38,7 @@ namespace ft {
 			   InputIt2 first2)
 	{
 		for (; first1 != last1; ++first1, ++first2) {
-			if (!(*first1 == *first2)) {
+			if (*first1 != *first2) {
 				return false;
 			}
 		}
@@ -62,6 +56,13 @@ namespace ft {
 		}
 		return true;
 	}
+
+    template <class T>
+    void swap(T& x, T& y) {
+        T tmp(x);
+        x = y;
+        y = tmp;
+    }
 }
 
 #endif
