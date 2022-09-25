@@ -1,7 +1,7 @@
 #ifndef MAP_HPP
-#define MAP_HPP
+# define MAP_HPP
 
-#include <memory>
+# include <memory>
 
 namespace ft {
 	template<
@@ -274,4 +274,4 @@ namespace ft {
     }
 }
 
-#endif
+#endif //MAP_HPP

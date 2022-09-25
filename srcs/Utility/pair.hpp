@@ -1,70 +1,70 @@
 #ifndef PAIR_HPP
-#define PAIR_HPP
+# define PAIR_HPP
 
 namespace ft {
 	template<
 	    class T1,
 		class T2
-	> struct Pair {
+	> struct pair {
 	private:
-		T1	first;
-		T2	second;
+		T1	_first;
+		T2	_second;
 
 	public:
-		Pair() : first(), second() { }
+		pair() : _first(), _second() { }
 
-		Pair( const T1& x, const T2& y ) : first(x), second(y) { }
+		pair( const T1& x, const T2& y ) : _first(x), _second(y) { }
 
 		template< class U1, class U2 >
-		Pair( const Pair<U1, U2>& p ) : first(p.first), second(p.second) { }
+		pair( const pair<U1, U2>& p ) : _first(p.first), _second(p.second) { }
 
-		Pair( const Pair& p ) = default;
+		pair( const pair& p ) = default;
 
-        ~Pair() { }
+        ~pair() { }
 
-		Pair& operator=( const Pair& other ) {
-            if (this != &src) {
-                first = src.first;
-                second = src.second;
+		pair& operator=( const pair& other ) {
+            if (this != &other) {
+                _first = other.first;
+                _second = other.second;
             }
             return *this;
         }
 	};
 
 	template< class T1, class T2 >
-	bool operator==( const Pair<T1, T2>& lhs,
-					const Pair<T1, T2>& rhs ) {
+	bool operator==( const pair<T1, T2>& lhs,
+					const pair<T1, T2>& rhs ) {
 		return lhs.first == rhs.first && lhs.second == rhs.second;
 	}
 
 	template< class T1, class T2 >
-	bool operator!=( const Pair<T1, T2>& lhs,
-					const Pair<T1, T2>& rhs ) {
+	bool operator!=( const pair<T1, T2>& lhs,
+					const pair<T1, T2>& rhs ) {
 		return !(lhs == rhs);
 	}
 
 	template< class T1, class T2 >
-	bool operator>( const Pair<T1, T2>& lhs,
-					const Pair<T1, T2>& rhs ) {
+	bool operator>( const pair<T1, T2>& lhs,
+					const pair<T1, T2>& rhs ) {
         return lhs.first > rhs.first
                 || (!(rhs.first > lhs.first) &&lhs.second > rhs.second);
 	}
 
 	template< class T1, class T2 >
-	bool operator>=( const Pair<T1, T2>& lhs,
-					const Pair<T1, T2>& rhs ) {
+	bool operator>=( const pair<T1, T2>& lhs,
+					const pair<T1, T2>& rhs ) {
         return !(rhs > lhs);
 	}
 
 	template< class T1, class T2 >
-	bool operator<( const Pair<T1, T2>& lhs,
-					const Pair<T1, T2>& rhs ) {
+	bool operator<( const pair<T1, T2>& lhs,
+					const pair<T1, T2>& rhs ) {
         return rhs > lhs;
 	}
 
 	template< class T1, class T2 >
-	bool operator<=( const Pair<T1, T2>& lhs,
-					const Pair<T1, T2>& rhs ) {
+	bool operator<=( const pair<T1, T2>& lhs,
+					const pair<T1, T2>& rhs ) {
 		return !(lhs > rhs);
 	}
 
@@ -80,15 +80,15 @@ namespace ft {
         typedef ft::pair<const Key, T> value_type;
         typedef Compare key_compare;
 
-        pair_compare(const key_compare &compare = key_compare()) : compare_(compare) {}
+        pair_compare(const key_compare &cmpr = key_compare()) : _cmpr(compare) {}
 
         bool operator()(const value_type &x, const value_type &y) const {
-            return (compare_(x.first, y.first));
+            return (_cmpr(x.first, y.first));
         }
 
     private:
-        key_compare compare_;
+        key_compare _cmpr;
     };
 }
 
-#endif
+#endif //PAIR_HPP

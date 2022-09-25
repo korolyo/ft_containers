@@ -116,7 +116,7 @@
 
 #include <iostream>
 #include <vector>
-#include "srcs/Vector.hpp"
+#include "srcs/vector.hpp"
 
 
 void print(int n) {

@@ -8,7 +8,7 @@ namespace ft {
 			class Key,
 			class Compare = std::less<Key>,
 			class Allocator = std::allocator<Key>
-	> class Set {
+	> class set {
 		typedef Key												                key_type;
 		typedef key_type										                value_type;
         typedef Compare                                                         key_compare;
@@ -37,7 +37,8 @@ namespace ft {
         size_type       _sz;
 
     public:
-        explicit Set(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) {
+        explicit set(const key_compare& comp = key_compare(),
+                     const allocator_type& alloc = allocator_type()) {
             _alloc = alloc;
             _node = _rb_tree.create_node(value_type());
             _cmpr = comp;
@@ -45,7 +46,7 @@ namespace ft {
         }
 
         template <class TemplateIterator>
-        Set(TemplateIterator first, TemplateIterator last,
+        set(TemplateIterator first, TemplateIterator last,
             const key_compare& comp = key_compare(),
             const allocator_type& alloc = allocator_type()) {
             _alloc = alloc;
@@ -55,7 +56,7 @@ namespace ft {
             insert(first, last);
         }
 
-        Set(const Set& x) {
+        set(const set& x) {
             _alloc = x._alloc;
             _node = _rb_tree.create_node(value_type());
             _cmpr = x._cmpr;
@@ -63,12 +64,12 @@ namespace ft {
             *this = x;
         }
 
-        ~Set() {
+        ~set() {
             _rb_tree.clear(&_node->parent);
             _rb_tree.clear(&_node);
         }
 
-        Set& operator=(const Set& x) {
+        set& operator=(const Set& x) {
             clear();
             _cmpr = x._cmpr;
             _alloc = x._alloc;
@@ -121,12 +122,12 @@ namespace ft {
             _rb_tree.max_size();
         }
 
-        ft::Pair<iterator, bool> insert(const value_type& val) {
+        ft::pair<iterator, bool> insert(const value_type& val) {
             bool res = _rb_tree.insert(&_node->parent, _rb_tree.create_node(val));
             _sz += res;
             p_node ptr = _rb_tree.find_node(_node->parent, val);
 
-            return ft::Pair<iterator, bool>(iterator(_node, ptr), res);
+            return ft::pair<iterator, bool>(iterator(_node, ptr), res);
         }
 
         template <class TemplateIterator>
@@ -160,7 +161,7 @@ namespace ft {
                 erase(first++);
         }
 
-        void swap(Set& x) {
+        void swap(set& x) {
             ft::swap(x._alloc);
             ft::swap(x._sz);
             ft::swap(x._node);
@@ -235,39 +236,39 @@ namespace ft {
 	};
 
     template <class Key, class Compare, class Allocator>
-    bool operator==(const Set<Key, Compare, Allocator> &x, const Set<Key, Compare, Allocator> &y){
+    bool operator==(const set<Key, Compare, Allocator> &x, const set<Key, Compare, Allocator> &y){
         return x.size() == y.size()
                && ft::equal(x.begin(), x.end(), y.begin())
                && ft::equal(y.begin(), y.end(), x.begin());
     }
 
     template <class Key, class Compare, class Allocator>
-    bool operator!=(const Set<Key, Compare, Allocator> &x, const Set<Key, Compare, Allocator> &y){
+    bool operator!=(const set<Key, Compare, Allocator> &x, const set<Key, Compare, Allocator> &y){
         return !(x == y);
     }
 
     template <class Key, class Compare, class Allocator>
-    bool operator<(const Set<Key, Compare, Allocator> &x,const Set<Key, Compare, Allocator> &y){
+    bool operator<(const set<Key, Compare, Allocator> &x,const set<Key, Compare, Allocator> &y){
         return ft::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end())
                && x != y;
     }
 
     template <class Key, class Compare, class Allocator>
-    bool operator<=(const Set<Key, Compare, Allocator> &x, const Set<Key, Compare, Allocator> &y){
+    bool operator<=(const set<Key, Compare, Allocator> &x, const set<Key, Compare, Allocator> &y){
         return x < y || x == y; }
 
     template <class Key, class Compare, class Allocator>
-    bool operator>(const Set<Key, Compare, Allocator> &x, const Set<Key, Compare, Allocator> &y){
+    bool operator>(const set<Key, Compare, Allocator> &x, const set<Key, Compare, Allocator> &y){
         return y < x;
     }
 
     template <class Key, class Compare, class Allocator>
-    bool operator>=(const Set<Key, Compare, Allocator> &x, const Set<Key, Compare, Allocator> &y){
+    bool operator>=(const set<Key, Compare, Allocator> &x, const set<Key, Compare, Allocator> &y){
         return x > y || x == y;
     }
 
     template <class Key, class Compare, class Allocator>
-    void swap(Set<Key, Compare, Allocator> &x, Set<Key, Compare, Allocator> &y){
+    void swap(set<Key, Compare, Allocator> &x, set<Key, Compare, Allocator> &y){
         x.swap(y);
     }
 }

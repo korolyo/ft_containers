@@ -1,5 +1,5 @@
-#ifndef UTILS_HPP
-# define UTILS_HPP
+#ifndef UTILITY_HPP
+# define UTILITY_HPP
 
 namespace ft {
 	template<bool B, class T = void>
@@ -89,4 +89,4 @@ namespace ft {
     };
 }
 
-#endif
+#endif //UTILITY_HPP

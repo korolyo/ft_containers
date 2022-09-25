@@ -1,8 +1,9 @@
 #ifndef REVERSE_ITERATOR_HPP
-#define REVERSE_ITERATOR_HPP
+# define REVERSE_ITERATOR_HPP
 
-#include <memory>
-#include "iterator_traits.hpp"
+# include "utility.hpp"
+# include "iterator_traits.hpp"
+# include "is_integral.hpp"
 
 namespace ft {
 
@@ -122,4 +123,4 @@ namespace ft {
     }
 }
 
-#endif
+#endif //REVERSE_ITERATOR_HPP

@@ -1,8 +1,8 @@
 #ifndef RANDOM_ACCESS_ITERATOR_HPP
-#define RANDOM_ACCESS_ITERATOR_HPP
+# define RANDOM_ACCESS_ITERATOR_HPP
 
-#include <memory>
-#include "iterator_traits.hpp"
+# include <memory>
+# include "iterator_traits.hpp"
 
 namespace ft {
 
@@ -139,4 +139,4 @@ namespace ft {
     }
 }
 
-#endif
+#endif //RANDOM_ACCESS_ITERATOR_HPP

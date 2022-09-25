@@ -48,4 +48,4 @@ namespace ft {
     struct is_integral<unsigned long long int>: public ft::integral_constant<bool, true>{};
 }
 
-#endif
+#endif //IS_INTEGRAL_HPP

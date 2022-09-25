@@ -1,7 +1,10 @@
 #ifndef ITERATOR_TRAITS_HPP
-#define ITERATOR_TRAITS_HPP
+# define ITERATOR_TRAITS_HPP
 
-#include <memory>
+# include <memory>
+# include <iterator>
+# include "utility.hpp"
+# include "is_integral.hpp"
 
 namespace ft {
 
@@ -52,4 +55,4 @@ namespace ft {
     }
 }
 
-#endif
+#endif //ITERATOR_TRAITS_HPP

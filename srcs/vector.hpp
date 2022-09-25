@@ -1,14 +1,14 @@
 #ifndef VECTOR_HPP
-#define VECTOR_HPP
+# define VECTOR_HPP
 
-#include <iostream>
-#include <memory>
-#include <algorithm>
-#include <cstddef>
-#include "Utility/random_access_iterator.hpp"
-#include "Utility/iterator_traits.hpp"
-#include "Utility/reverse_iterator.hpp"
-#include "Utility/utility.hpp"
+# include <iostream>
+# include <memory>
+# include <algorithm>
+# include <cstddef>
+# include "Utility/random_access_iterator.hpp"
+# include "Utility/iterator_traits.hpp"
+# include "Utility/reverse_iterator.hpp"
+# include "Utility/utility.hpp"
 
 namespace ft
 {
@@ -16,7 +16,7 @@ namespace ft
 			typename T,
 			class Allocator = std::allocator<T>
 	>
-	class Vector
+	class vector
 	{
 		typedef T														value_type;
 		typedef Allocator												allocator_type;
@@ -430,47 +430,47 @@ namespace ft
 	};
 
 	template<typename T, class Alloc>
-	bool operator==(const Vector<T, Alloc>& lhs,
-					const Vector<T, Alloc>& rhs) {
-		const typename Vector<T, Alloc>::size_type sz = lhs.size();
+	bool operator==(const vector<T, Alloc>& lhs,
+					const vector<T, Alloc>& rhs) {
+		const typename vector<T, Alloc>::size_type sz = lhs.size();
 		return lhs.size() == rhs.size() && std::equal(lhs.begin(), lhs.end(), rhs.begin());
 	}
 
 	template<typename T, class Alloc>
-	bool operator!=(const Vector<T, Alloc>& lhs,
-					const Vector<T, Alloc>& rhs) {
+	bool operator!=(const vector<T, Alloc>& lhs,
+					const vector<T, Alloc>& rhs) {
 		return !(lhs == rhs);
 	}
 
 	template<typename T, class Alloc>
-	bool operator<(const Vector<T, Alloc>& lhs,
-				   const Vector<T, Alloc>& rhs) {
+	bool operator<(const vector<T, Alloc>& lhs,
+				   const vector<T, Alloc>& rhs) {
 		return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 	}
 
 	template<typename T, class Alloc>
-	bool operator>(const Vector<T, Alloc>& lhs,
-				   const Vector<T, Alloc>& rhs) {
+	bool operator>(const vector<T, Alloc>& lhs,
+				   const vector<T, Alloc>& rhs) {
 		return rhs < lhs;
 	}
 
 	template<typename T, class Alloc>
-	bool operator<=(const Vector<T, Alloc>& lhs,
-					const Vector<T, Alloc>& rhs) {
+	bool operator<=(const vector<T, Alloc>& lhs,
+					const vector<T, Alloc>& rhs) {
 		return !(lhs > rhs);
 	}
 
 	template<typename T, class Alloc>
-	bool operator>=(const Vector<T, Alloc>& lhs,
-					const Vector<T, Alloc>& rhs) {
+	bool operator>=(const vector<T, Alloc>& lhs,
+					const vector<T, Alloc>& rhs) {
 		return !(lhs < rhs);
 	}
 
 	template<class T, class Allocator>
-	void swap( ft::Vector<T,Allocator>& lhs,
-			   ft::Vector<T,Allocator>& rhs ) {
+	void swap( ft::vector<T,Allocator>& lhs,
+			   ft::vector<T,Allocator>& rhs ) {
 		lhs.swap(rhs);
 	}
 }
 
-#endif
+#endif // VECTOR_HPP

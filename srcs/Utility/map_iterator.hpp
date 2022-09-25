@@ -1,21 +1,21 @@
 #ifndef MAP_ITERATOR_HPP
-#define MAP_ITERATOR_HPP
+# define MAP_ITERATOR_HPP
 
-#include <memory>
-#include "iterator_traits.hpp"
+# include "utility.hpp"
+# include "node.hpp"
 
 namespace ft
 {
     template<typename T>
     class rbt_iterator{
     public:
-        typedef typename std::iterator<std::bidirectional_iterator_tag, T> rbt_it;
-        typedef typename rbt_it::iterator_category iterator_category;
-        typedef typename rbt_it::value_type value_type;
-        typedef typename rbt_it::difference_type difference_type;
-        typedef T *pointer;
-        typedef T &reference;
-        typedef ft::node<typename ft::switch_const<T>::type> *p_node;
+        typedef typename std::iterator<std::bidirectional_iterator_tag, T>  rbt_it;
+        typedef typename rbt_it::iterator_category                          iterator_category;
+        typedef typename rbt_it::value_type                                 value_type;
+        typedef typename rbt_it::difference_type                            difference_type;
+        typedef T*                                                          pointer;
+        typedef T&                                                          reference;
+        typedef ft::node<typename ft::switch_const<T>::type>                *p_node;
 
         rbt_iterator() : root_(nullptr), node_(nullptr){}
 
@@ -117,4 +117,4 @@ namespace ft
     };
 }
 
-#endif
+#endif //MAP_ITERATOR_HPP
