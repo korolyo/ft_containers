@@ -4,7 +4,7 @@ NAME		=	containers
 SOURCES_LIST	=	Main.cpp\
 
 CC		= c++
-CFLAGS	=	-Werror -Wall -Wextra -std=c++98 -pedantic-errors -MMD
+CFLAGS	=	-Werror -Wall -Wextra -pedantic-errors -MMD
 
 INCLUDES = -I$(HEADERS_DIR)
 

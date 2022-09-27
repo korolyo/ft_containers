@@ -3,6 +3,7 @@
 
 # include <memory>
 # include "iterator_traits.hpp"
+# include "random_access_iterator.hpp"
 
 namespace ft {
 
@@ -11,31 +12,33 @@ namespace ft {
     {
     public:
         typedef T* iterator_type;
-        typedef typename ft::iterators<std::random_access_iterator_tag, T>::iterator_category iterator_category;
-        typedef typename ft::iterators<std::random_access_iterator_tag, T>::value_type value_type;
-        typedef typename ft::iterators<std::random_access_iterator_tag, T>::difference_type difference_type;
-        typedef typename ft::iterators<std::random_access_iterator_tag, T>::pointer pointer;
-        typedef typename ft::iterators<std::random_access_iterator_tag, T>::reference reference;
+        typedef typename ft::iterators<std::random_access_iterator_tag, T>::iterator_category	iterator_category;
+        typedef typename ft::iterators<std::random_access_iterator_tag, T>::value_type			value_type;
+        typedef typename ft::iterators<std::random_access_iterator_tag, T>::difference_type		difference_type;
+        typedef typename ft::iterators<std::random_access_iterator_tag, T>::pointer				pointer;
+        typedef typename ft::iterators<std::random_access_iterator_tag, T>::reference			reference;
 
         random_access_iterator() {}
-        random_access_iterator(pointer position): position_(position) {}
+        random_access_iterator(pointer position): _position(position) {}
         ~random_access_iterator() {}
 
         random_access_iterator(const random_access_iterator &src) {
             *this = src;
         }
 
-        pointer base() const {return position_;}
+        pointer base() const {
+			return _position;
+		}
 
         random_access_iterator &operator=(const random_access_iterator &src) {
             if (this == &src)
                 return (*this);
-            position_ = src.base();
+            _position = src.base();
             return *this;
         }
 
         reference &operator*() {
-            return (*position_);
+            return (*_position);
         }
 
         pointer operator->() const {
@@ -43,11 +46,11 @@ namespace ft {
         }
 
         random_access_iterator operator+(difference_type n) const {
-            return position_ + n;
+            return _position + n;
         }
 
         random_access_iterator &operator++() {
-            position_++;
+            _position++;
             return *this;
         }
 
@@ -58,16 +61,16 @@ namespace ft {
         }
 
         random_access_iterator &operator+=(difference_type n) {
-            position_ += n;
+            _position += n;
             return *this;
         }
 
         random_access_iterator operator-(difference_type n) const {
-            return position_ - n;
+            return _position - n;
         }
 
         random_access_iterator &operator--() {
-            position_--;
+            _position--;
             return (*this);
         }
 
@@ -78,7 +81,7 @@ namespace ft {
         }
 
         random_access_iterator &operator-=(difference_type n) {
-            position_ -= n;
+            _position -= n;
             return *this;
         }
 
@@ -87,11 +90,11 @@ namespace ft {
         }
 
         operator random_access_iterator<const T>(void) const {
-            return (random_access_iterator<const T>(this->position_));
+            return (random_access_iterator<const T>(this->_position));
         }
 
     private:
-        pointer position_;
+        pointer _position;
     };
 
     template<class Iterator>
@@ -139,4 +142,4 @@ namespace ft {
     }
 }
 
-#endif //RANDOM_ACCESS_ITERATOR_HPP
+#endif // RANDOM_ACCESS_ITERATOR_HPP

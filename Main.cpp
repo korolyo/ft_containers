@@ -125,7 +125,7 @@ void print(int n) {
 
 int main() {
 	std::vector<int> original;
-	ft::Vector<int> myVector;
+	ft::vector<int> myVector;
 
     original.push_back(1);
     original.push_back(2);

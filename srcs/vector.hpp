@@ -20,15 +20,15 @@ namespace ft
 	{
 		typedef T														value_type;
 		typedef Allocator												allocator_type;
-		typedef size_t 													size_type;
-		typedef value_type&												reference;
-		typedef const value_type&										const_reference;
+		typedef typename allocator_type::size_type 						size_type;
+		typedef typename allocator_type::reference						reference;
+		typedef typename allocator_type::const_reference				const_reference;
 		typedef typename Allocator::pointer								pointer;
 		typedef typename Allocator::const_pointer						const_pointer;
-		typedef typename ft::Random_access_iterator<pointer>		    iterator;
-		typedef typename ft::Random_access_iterator<const_pointer>		const_iterator;
-		typedef typename ft::Reverse_iterator<iterator>					reverse_iterator;
-		typedef typename ft::Reverse_iterator<const_iterator>			const_reverse_iterator;
+		typedef typename ft::random_access_iterator<value_type>		    iterator;
+		typedef typename ft::random_access_iterator<const value_type>	const_iterator;
+		typedef typename ft::reverse_iterator<iterator>					reverse_iterator;
+		typedef typename ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 
 	private:
 		value_type	*_arr;
@@ -38,21 +38,21 @@ namespace ft
 
 	public:
 		// Member functions
-		Vector() {
+		vector() {
 			_sz = 0;
 			_cap = 0;
 			_alloc = Allocator();
             _arr = nullptr;
 		}
 
-		explicit Vector( const Allocator& alloc ) {
-			this->_alloc = Allocator( alloc );
+		explicit vector( const Allocator& alloc ) {
+			_alloc = Allocator( alloc );
 			_cap = 0;
 			_sz = 0;
             _arr = nullptr;
 		}
 
-		explicit Vector( size_type count,
+		explicit vector( size_type count,
 						 const T& value = T(),
 						 const Allocator& alloc = Allocator() ) {
 			_sz = count;
@@ -70,7 +70,7 @@ namespace ft
 		}
 
 		template< class InputIt >
-		Vector( InputIt first, InputIt last,
+		vector( InputIt first, InputIt last,
 				const Allocator& alloc = Allocator() ) {
 			_sz = last - first;
             _cap = _sz;
@@ -82,7 +82,7 @@ namespace ft
                 _alloc.construct(tmpData, *it);
 		}
 
-        Vector( const Vector& other ) {
+        vector( const vector& other ) {
             _sz = other._sz;
             _cap = other._cap;
             _alloc = other._alloc;
@@ -92,16 +92,15 @@ namespace ft
                 _alloc.construct(_arr + i, other[i]);
         }
 
-		~Vector() {
-			while (_sz > 0)
-			{
+		~vector() {
+			while (_sz > 0) {
                 _sz--;
                 _alloc.destroy(_arr + _sz);
 			}
 			_alloc.deallocate(_arr, _cap);
 		}
 
-		Vector& operator=( const Vector& other ) {
+		vector& operator=( const vector& other ) {
 			if (&other != this) {
                 _sz = other._sz;
                 _alloc.deallocate(_arr, _cap);
@@ -149,7 +148,6 @@ namespace ft
 		}
 
 		// Element access
-
 		reference at( size_type pos ) {
 			if (pos >= _sz)
 				throw std::out_of_range("Out of range");
@@ -272,9 +270,9 @@ namespace ft
 			size_type dist = pos - begin();
             if (_sz < _cap) {
                 for (iterator it = end(); it != pos - 1; --it) {
-                    _alloc.construct(&(*pos), val);
+                    _alloc.construct(&(*pos), value);
                 }
-                _alloc.construct(&(*pos), val);
+                _alloc.construct(&(*pos), value);
                 ++_sz;
             }
             else {
@@ -328,9 +326,9 @@ namespace ft
 		void insert( iterator pos,
 					 InputIt first,
 					 InputIt Last,
-                     typename ft::enable_if<!ft::is_integral<TemplateIterator>::value>::type* = 0) {
+                     typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0) {
 			size_type n = static_cast<size_type>(ft::distance(begin(), pos));
-            size_type distance = static_cast<size_type>(ft::distance(begin(), position));
+            size_type distance = static_cast<size_type>(ft::distance(begin(), pos));
             if (pos > end() || pos < begin())
                 throw std::range_error("Index Error");
             value_type *tmp_data = _alloc.allocate(n);
@@ -414,7 +412,7 @@ namespace ft
             }
             else if (count > _sz && count < max_size()) {
                 if (count > _cap && count <= _cap * 2)
-                    reserve(capacity_ * 2);
+                    reserve(_cap * 2);
                 else if (count > _cap * 2)
                     reserve(count);
                 for(; _sz < count; ++_sz)
@@ -422,7 +420,7 @@ namespace ft
             }
 		}
 
-		void swap( Vector &other ) {
+		void swap( vector &other ) {
 			ft::swap(_arr, other._arr);
             ft::swap(_cap, other._cap);
             ft::swap(_sz, other._sz);
