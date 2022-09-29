@@ -1,54 +1,55 @@
 #ifndef SET_HPP
-#define SET_HPP
+# define SET_HPP
 
-#include <memory>
+# include <memory>
+# include "Utility/utility.hpp"
+# include "Utility/pair.hpp"
+# include "Utility/reverse_iterator.hpp"
+# include "Utility/red_black_tree.hpp"
+# include "Utility/rbt_iterator.hpp"
+# include "Utility/iterator_traits.hpp"
+# include "Utility/reverse_iterator.hpp"
 
 namespace ft {
-	template<
-			class Key,
-			class Compare = std::less<Key>,
-			class Allocator = std::allocator<Key>
-	> class set {
-		typedef Key												                key_type;
-		typedef key_type										                value_type;
-        typedef Compare                                                         key_compare;
-        typedef Compare                                                         value_compare;
-		typedef Allocator										                allocator_type;
-        typedef typename allocator_type::reference                              reference;
-        typedef typename allocator_type::const_reference                        const_reference;
-        typedef typename allocator_type::pointer                                pointer;
-        typedef typename allocator_type::const_pointer                          const_pointer;
-        typedef ft::Rbt_iterator<value_type>                                    iterator;
-		typedef ft::Rbt_iterator<const value_type>                              const_iterator;
-        typedef ft::Reverse_iterator<value_type>                                reverse_iterator;
-        typedef ft::Reverse_iterator<const value_type>                          const_reverse_iterator;
-        typedef difference_type                                                 size_type;
-		typedef typename ft::Iterator_traits<iterator>::difference_type         difference_type;
-
-        typedef typename ft::node<value_type>                                   *p_node;
-        typedef typename Allocator::template rebind<node<value_type> >::other   node_allocator_type;
-        typedef red_black_tree<value_type, value_compare, node_allocator_type>  tree_type;
-
-	private:
-		tree_type       _rb_tree;
-        allocator_type  _alloc;
-        p_node          _node;
-        key_compare     _cmpr;
-        size_type       _sz;
-
+    template<
+            class Key,
+            class Compare = std::less<Key>,
+            class Allocator = std::allocator<Key>
+    >
+    class set {
     public:
-        explicit set(const key_compare& comp = key_compare(),
-                     const allocator_type& alloc = allocator_type()) {
+        typedef Key key_type;
+        typedef key_type value_type;
+        typedef Compare key_compare;
+        typedef Compare value_compare;
+        typedef Allocator allocator_type;
+        typedef typename allocator_type::reference reference;
+        typedef typename allocator_type::const_reference const_reference;
+        typedef typename allocator_type::pointer pointer;
+        typedef typename allocator_type::const_pointer const_pointer;
+        typedef ft::rbt_iterator<const value_type> const_iterator;
+        typedef ft::rbt_iterator<value_type> iterator;
+        typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
+        typedef ft::reverse_iterator<iterator> reverse_iterator;
+        typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
+        typedef difference_type size_type;
+
+        typedef typename ft::node<value_type> *p_node;
+        typedef typename Allocator::template rebind<node<value_type> >::other node_allocator_type;
+        typedef red_black_tree<value_type, value_compare, node_allocator_type> tree_type;
+
+        explicit set(const key_compare &comp = key_compare(),
+                     const allocator_type &alloc = allocator_type()) {
             _alloc = alloc;
             _node = _rb_tree.create_node(value_type());
             _cmpr = comp;
             _sz = 0;
         }
 
-        template <class TemplateIterator>
+        template<class TemplateIterator>
         set(TemplateIterator first, TemplateIterator last,
-            const key_compare& comp = key_compare(),
-            const allocator_type& alloc = allocator_type()) {
+            const key_compare &comp = key_compare(),
+            const allocator_type &alloc = allocator_type()) {
             _alloc = alloc;
             _node = _rb_tree.create_node(value_type());
             _cmpr = comp;
@@ -56,7 +57,7 @@ namespace ft {
             insert(first, last);
         }
 
-        set(const set& x) {
+        set(const set &x) {
             _alloc = x._alloc;
             _node = _rb_tree.create_node(value_type());
             _cmpr = x._cmpr;
@@ -69,7 +70,7 @@ namespace ft {
             _rb_tree.clear(&_node);
         }
 
-        set& operator=(const Set& x) {
+        set &operator=(const set &x) {
             clear();
             _cmpr = x._cmpr;
             _alloc = x._alloc;
@@ -122,7 +123,7 @@ namespace ft {
             _rb_tree.max_size();
         }
 
-        ft::pair<iterator, bool> insert(const value_type& val) {
+        ft::pair<iterator, bool> insert(const value_type &val) {
             bool res = _rb_tree.insert(&_node->parent, _rb_tree.create_node(val));
             _sz += res;
             p_node ptr = _rb_tree.find_node(_node->parent, val);
@@ -130,27 +131,27 @@ namespace ft {
             return ft::pair<iterator, bool>(iterator(_node, ptr), res);
         }
 
-        template <class TemplateIterator>
+        template<class TemplateIterator>
         void insert(TemplateIterator first, TemplateIterator last) {
             for (; first != last; ++first) {
                 insert(*first);
             }
         }
 
-        iterator insert(iterator, const value_type& val) {
-            _sz += _rb_tree.insert(&node->parent, _rb_tree.create_node(val));
+        iterator insert(iterator, const value_type &val) {
+            _sz += _rb_tree.insert(&_node->parent, _rb_tree.create_node(val));
             p_node ptr = _rb_tree.find_node(_node->parent, val);
             return iterator(_node, ptr);
         }
 
         void erase(iterator pos) {
-            bool res = _rb_tree.erase(&node->parent, *pos);
+            bool res = _rb_tree.erase(&_node->parent, *pos);
             if (res)
                 --_sz;
         }
 
-        size_type erase(const value_type& val) {
-            bool res = (bool)_rb_tree.erase(&_node->parent, val);
+        size_type erase(const value_type &val) {
+            bool res = (bool) _rb_tree.erase(&_node->parent, val);
             if (res)
                 --_sz;
             return res;
@@ -161,7 +162,7 @@ namespace ft {
                 erase(first++);
         }
 
-        void swap(set& x) {
+        void swap(set &x) {
             ft::swap(x._alloc);
             ft::swap(x._sz);
             ft::swap(x._node);
@@ -169,7 +170,7 @@ namespace ft {
         }
 
         void clear() {
-            _rb_tree.clear(&node->parent);
+            _rb_tree.clear(&_node->parent);
             _node->parent = 0;
             _sz = 0;
         }
@@ -182,95 +183,103 @@ namespace ft {
             return _cmpr;
         }
 
-        iterator  find(const Key& val) const {
+        iterator find(const Key &val) {
             p_node ptr = _rb_tree.find_node(_node->parent, val);
             return iterator(_node, ptr);
         }
 
-        const_iterator  find(const Key& val) const {
+        const_iterator find(const Key &val) const {
             p_node ptr = _rb_tree.find_node(_node->parent, val);
             return const_iterator(_node, ptr);
         }
 
-        size_type count(const Key& val) const {
+        size_type count(const Key &val) const {
             if (_rb_tree.find_node(_node->parent, val))
                 return 1;
             return 0;
         }
 
-        iterator lower_bound(const Key& val) {
+        iterator lower_bound(const Key &val) {
             return iterator(_node, _rb_tree.lower_elem(_node->parent, val));
         }
 
-        const_iterator lower_bound(const Key& val) const {
+        const_iterator lower_bound(const Key &val) const {
             return const_iterator(_node, _rb_tree.lower_elem(_node->parent, val));
         }
 
-        iterator upper_bound(const Key& val) {
-            p_node tmp = rb_tree_.lowest_elem(node_->parent, val);
-            iterator res(node_, tmp);
+        iterator upper_bound(const Key &val) {
+            p_node tmp = _rb_tree.lowest_elem(_node->parent, val);
+            iterator res(_node, tmp);
             if (tmp && tmp->value == val)
                 ++res;
             return const_iterator(res);
         }
 
-        const_iterator upper_bound(const Key& val) const {
-            p_node tmp = rb_tree_.lowest_elem(node_->parent, val);
-            iterator res(node_, tmp);
+        const_iterator upper_bound(const Key &val) const {
+            p_node tmp = _rb_tree.lowest_elem(_node->parent, val);
+            iterator res(_node, tmp);
             if (tmp && tmp->value == val)
                 ++res;
             return const_iterator(res);
         }
 
-        ft::pair<iterator, iterator> equal_range(const Key& val){
+        ft::pair<iterator, iterator> equal_range(const Key &val) {
             return ft::make_pair(lower_bound(val), upper_bound(val));
         }
 
-        ft::pair<const_iterator, const_iterator> equal_range(const Key& val) const{
+        ft::pair<const_iterator, const_iterator> equal_range(const Key &val) const {
             return ft::make_pair(lower_bound(val), upper_bound(val));
         }
 
-        allocator_type get_allocator() const{
+        allocator_type get_allocator() const {
             return _alloc;
         }
-	};
 
-    template <class Key, class Compare, class Allocator>
-    bool operator==(const set<Key, Compare, Allocator> &x, const set<Key, Compare, Allocator> &y){
+    private:
+        tree_type _rb_tree;
+        allocator_type _alloc;
+        p_node _node;
+        key_compare _cmpr;
+        size_type _sz;
+    };
+
+    template<class Key, class Compare, class Allocator>
+    bool operator==(const set<Key, Compare, Allocator> &x, const set<Key, Compare, Allocator> &y) {
         return x.size() == y.size()
                && ft::equal(x.begin(), x.end(), y.begin())
                && ft::equal(y.begin(), y.end(), x.begin());
     }
 
-    template <class Key, class Compare, class Allocator>
-    bool operator!=(const set<Key, Compare, Allocator> &x, const set<Key, Compare, Allocator> &y){
+    template<class Key, class Compare, class Allocator>
+    bool operator!=(const set<Key, Compare, Allocator> &x, const set<Key, Compare, Allocator> &y) {
         return !(x == y);
     }
 
-    template <class Key, class Compare, class Allocator>
-    bool operator<(const set<Key, Compare, Allocator> &x,const set<Key, Compare, Allocator> &y){
+    template<class Key, class Compare, class Allocator>
+    bool operator<(const set<Key, Compare, Allocator> &x, const set<Key, Compare, Allocator> &y) {
         return ft::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end())
                && x != y;
     }
 
-    template <class Key, class Compare, class Allocator>
-    bool operator<=(const set<Key, Compare, Allocator> &x, const set<Key, Compare, Allocator> &y){
-        return x < y || x == y; }
+    template<class Key, class Compare, class Allocator>
+    bool operator<=(const set<Key, Compare, Allocator> &x, const set<Key, Compare, Allocator> &y) {
+        return x < y || x == y;
+    }
 
-    template <class Key, class Compare, class Allocator>
-    bool operator>(const set<Key, Compare, Allocator> &x, const set<Key, Compare, Allocator> &y){
+    template<class Key, class Compare, class Allocator>
+    bool operator>(const set<Key, Compare, Allocator> &x, const set<Key, Compare, Allocator> &y) {
         return y < x;
     }
 
-    template <class Key, class Compare, class Allocator>
-    bool operator>=(const set<Key, Compare, Allocator> &x, const set<Key, Compare, Allocator> &y){
+    template<class Key, class Compare, class Allocator>
+    bool operator>=(const set<Key, Compare, Allocator> &x, const set<Key, Compare, Allocator> &y) {
         return x > y || x == y;
     }
 
-    template <class Key, class Compare, class Allocator>
-    void swap(set<Key, Compare, Allocator> &x, set<Key, Compare, Allocator> &y){
+    template<class Key, class Compare, class Allocator>
+    void swap(set<Key, Compare, Allocator> &x, set<Key, Compare, Allocator> &y) {
         x.swap(y);
     }
 }
 
-#endif
+#endif // SET_HPP

@@ -4,19 +4,24 @@ NAME		=	containers
 SOURCES_LIST	=	Main.cpp\
 
 CC		= c++
-CFLAGS	=	-Werror -Wall -Wextra -pedantic-errors -MMD
+CFLAGS	=	-Werror -Wall -Wextra -MMD
 
 INCLUDES = -I$(HEADERS_DIR)
 
-HEADERS_LIST =	Stack.hpp\
-				Vector.hpp\
-				Utils.hpp\
-				Iterator_traits.hpp\
-				Vector_iterator.hpp\
-				Map_iterator.hpp\
-				Pair.hpp\
-				Map.hpp\
-				Set.hpp\
+HEADERS_LIST =	stack.hpp\
+				vector.hpp\
+				set.hpp\
+				map.hpp\
+				Utility/is_integral.hpp \
+				Utility/iterator_traits.hpp\
+				Utility/map_iterator.hpp\
+				Utility/node.hpp \
+				Utility/pair.hpp\
+				Utility/random_access_iterator.hpp \
+				Utility/red_black_tree.hpp \
+				Utility/reverse_iterator.hpp \
+				Utility/utility.hpp\
+
 
 
 HEADERS_DIR	=  ./srcs
@@ -33,7 +38,6 @@ $(NAME): $(OBJECTS)
 
 %.o : %.cpp $(HEADERS) Makefile
 	@$(CC) $(CFLAGS) -c $(INCLUDES) $< -o $@
-
 
 clean:
 		@rm -f $(OBJECTS)

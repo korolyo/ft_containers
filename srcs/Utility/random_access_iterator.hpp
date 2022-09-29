@@ -7,19 +7,20 @@
 
 namespace ft {
 
-    template <typename T>
-    class random_access_iterator : ft::iterators<std::random_access_iterator_tag, T>
-    {
+    template<typename T>
+    class random_access_iterator : ft::iterators<std::random_access_iterator_tag, T> {
     public:
-        typedef T* iterator_type;
-        typedef typename ft::iterators<std::random_access_iterator_tag, T>::iterator_category	iterator_category;
-        typedef typename ft::iterators<std::random_access_iterator_tag, T>::value_type			value_type;
-        typedef typename ft::iterators<std::random_access_iterator_tag, T>::difference_type		difference_type;
-        typedef typename ft::iterators<std::random_access_iterator_tag, T>::pointer				pointer;
-        typedef typename ft::iterators<std::random_access_iterator_tag, T>::reference			reference;
+        typedef T *iterator_type;
+        typedef typename ft::iterators<std::random_access_iterator_tag, T>::iterator_category iterator_category;
+        typedef typename ft::iterators<std::random_access_iterator_tag, T>::value_type value_type;
+        typedef typename ft::iterators<std::random_access_iterator_tag, T>::difference_type difference_type;
+        typedef typename ft::iterators<std::random_access_iterator_tag, T>::pointer pointer;
+        typedef typename ft::iterators<std::random_access_iterator_tag, T>::reference reference;
 
         random_access_iterator() {}
-        random_access_iterator(pointer position): _position(position) {}
+
+        random_access_iterator(pointer position) : _position(position) {}
+
         ~random_access_iterator() {}
 
         random_access_iterator(const random_access_iterator &src) {
@@ -27,8 +28,8 @@ namespace ft {
         }
 
         pointer base() const {
-			return _position;
-		}
+            return _position;
+        }
 
         random_access_iterator &operator=(const random_access_iterator &src) {
             if (this == &src)

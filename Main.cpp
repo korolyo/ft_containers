@@ -1,156 +1,496 @@
-//#include <iostream>
-//#include <string>
-//#include <deque>
-//#if 1 //CREATE A REAL STL EXAMPLE
-//	#include <map>
-//	#include <stack>
-//	#include <vector>
-//	namespace ft = std;
-//#else
-//	#include <map.hpp>
-//	#include <stack.hpp>
-//	#include <vector.hpp>
-//#endif
-//
-//#include <stdlib.h>
-//
-//#define MAX_RAM 4294967296
-//#define BUFFER_SIZE 4096
-//struct Buffer
-//{
-//	int idx;
-//	char buff[BUFFER_SIZE];
-//};
-//
-//#define COUNT (MAX_RAM / (int)sizeof(Buffer))
-//
-//template<typename T>
-//class MutantStack : public ft::stack<T>
-//{
-//public:
-//	MutantStack() {}
-//	MutantStack(const MutantStack<T>& src) { *this = src; }
-//	MutantStack<T>& operator=(const MutantStack<T>& rhs)
-//	{
-//		this->c = rhs.c;
-//		return *this;
-//	}
-//	~MutantStack() {}
-//
-//	typedef typename ft::stack<T>::container_type::iterator iterator;
-
-//	iterator begin() { return this->c.begin(); }
-//	iterator end() { return this->c.end(); }
-//};
-
-//int main(int argc, char** argv) {
-//	if (argc != 2)
-//	{
-//		std::cerr << "Usage: ./test seed" << std::endl;
-//		std::cerr << "Provide a seed please" << std::endl;
-//		std::cerr << "Count value:" << COUNT << std::endl;
-//		return 1;
-//	}
-//	const int seed = atoi(argv[1]);
-//	srand(seed);
-//
-//	ft::vector<std::string> vector_str;
-//	ft::vector<int> vector_int;
-//	ft::stack<int> stack_int;
-//	ft::vector<Buffer> vector_buffer;
-//	ft::stack<Buffer, std::deque<Buffer> > stack_deq_buffer;
-//	ft::map<int, int> map_int;
-//
-//	for (int i = 0; i < COUNT; i++)
-//	{
-//		vector_buffer.push_back(Buffer());
-//	}
-//
-//	for (int i = 0; i < COUNT; i++)
-//	{
-//		const int idx = rand() % COUNT;
-//		vector_buffer[idx].idx = 5;
-//	}
-//	ft::vector<Buffer>().swap(vector_buffer);
-//
-//	try
-//	{
-//		for (int i = 0; i < COUNT; i++)
-//		{
-//			const int idx = rand() % COUNT;
-//			vector_buffer.at(idx);
-//			std::cerr << "Error: THIS VECTOR SHOULD BE EMPTY!!" <<std::endl;
-//		}
-//	}
-//	catch(const std::exception& e)
-//	{
-//		NORMAL ! :P
-//	}
-
-//	for (int i = 0; i < COUNT; ++i)
-//	{
-//		map_int.insert(ft::make_pair(rand(), rand()));
-//	}
-//
-//	int sum = 0;
-//	for (int i = 0; i < 10000; i++)
-//	{
-//		int access = rand();
-//		sum += map_int[access];
-//	}
-//	std::cout << "should be constant with the same seed: " << sum << std::endl;
-//
-//	{
-//		ft::map<int, int> copy = map_int;
-//	}
-//	MutantStack<char> iterable_stack;
-//	for (char letter = 'a'; letter <= 'z'; letter++)
-//		iterable_stack.push(letter);
-//	for (MutantStack<char>::iterator it = iterable_stack.begin(); it != iterable_stack.end(); it++)
-//	{
-//		std::cout << *it;
-//	}
-//	std::cout << std::endl;
-//	return (0);
-//};
-
-#include <iostream>
 #include <vector>
 #include "srcs/vector.hpp"
+#include <iterator>
+#include <assert.h>
+#include <iostream>
+#include <typeinfo>
+#define assertm(exp, msg) assert(((void)msg, exp))
 
 
-void print(int n) {
-	std::cout << " " << n;
+//typedef need add test "typydef iterator"
+void TypedefTest() {
+    assertm(typeid(std::vector<int>::value_type) == typeid(ft::vector<int>::value_type), "value_type");
+    assertm(typeid(std::vector<char *>::value_type) != typeid(ft::vector<int>::value_type), "value_type differents type");
+    assertm(typeid(std::vector<int>::allocator_type) == typeid(ft::vector<int>::allocator_type), "allocator_type");
+    assertm(typeid(std::vector<void *>::allocator_type) != typeid(ft::vector<int>::allocator_type), "allocator_type differents type");
+    assertm(typeid(std::vector<int>::reference) == typeid(ft::vector<int>::reference), "reference");
+    assertm(typeid(std::vector<void *>::reference) != typeid(ft::vector<int>::reference), "reference differents type");
+    assertm(typeid(std::vector<int>::const_reference) == typeid(ft::vector<int>::const_reference), "const_reference");
+    assertm(typeid(std::vector<void *>::const_reference) != typeid(ft::vector<int>::const_reference), "const_reference differents type");
+    assertm(typeid(std::vector<int>::size_type) == typeid(ft::vector<int>::size_type), "size_type");
+    assertm(typeid(std::vector<int>::difference_type) == typeid(ft::vector<int>::difference_type), "difference_type");
 }
 
-int main() {
-	std::vector<int> original;
-	ft::vector<int> myVector;
 
-    original.push_back(1);
-    original.push_back(2);
-    original.push_back(3);
+class A {
+private:
+    A(const A &a){val = a.val;}
+public:
+    int val;
+    A() {
+        val = 1;
+    }
+    A(int value) {
+        val = value;
+    }
+    ~A() {
 
-    myVector.push_back(1);
-    myVector.push_back(2);
-    myVector.push_back(3);
+    }
+};
 
-	std::cout << "Original:\n";
-	std::for_each(original.begin(), original.end(), print);
-	std::cout << "\nMyVector:\n";
-	std::for_each(myVector.begin(), myVector.end(), print);
-	std::cout << "\n";
+class B {
+public:
+    int val;
+    B() {
+        val = 2;
+    }
+    B(const B &b){ val = b.val;}
+    B(int value) {
+        val = value;
+    }
+    ~B() {}
+};
 
-    std::cout << "Original size/ capacity:\n";
-	std::cout << original.size() << std::endl;
-	std::cout << original.capacity() << std::endl;
 
-    std::cout << "\nMyVector size/ capacity:\n";
-	std::cout << myVector.size() << std::endl;
-	std::cout << myVector.capacity() << std::endl;
+void ConstructorTest() {
 
-//	ft::Vector<int> ve(10);
+    ft::vector<int> fvec1;
+    std::vector<int> svec1;
+    assertm(fvec1.empty() == svec1.empty(), "Default constructor check empty");
+    assertm(fvec1.size() == svec1.size(), "Default constructor check size");
+    assertm(fvec1.capacity() == svec1.capacity(), "Default constructor check capacity");
 
-//	std::cout << ve.size() << std::endl;
-//	std::cout << ve.capacity() << std::endl;
+    ft::vector<B> fvec2(100, B(20));
+    std::vector<B> svec2(100, B(20));
+
+    for (size_t i = 0; i < 100; ++i) {
+        assertm(svec2[i].val == fvec2[i].val, "Fill Constructor check value");
+    }
+    assertm(fvec2.size() == svec2.size(), "fill constructor check size");
+    assertm(fvec2.empty() == svec2.empty(), "fill constructor check empty");
+    assertm(fvec2.max_size() == svec2.max_size(), "fill constructor check max size");
+    assertm(fvec2.capacity() == svec2.capacity(), "fill constructor check capacity");
+
+    ft::vector<A> fvec3(100);
+    std::vector<A> svec3(100);
+
+    ft::vector<B> fvec4(fvec2);
+    std::vector<B> svec4(svec2);
+
+    for (size_t i = 0; i < 100; ++i) {
+        assertm(svec4[i].val == fvec4[i].val, "Copy Constructor check value");
+    }
+    assertm(fvec4.size() == svec4.size(), "Copy Constructor check size");
+    assertm(fvec4.max_size() == svec4.max_size(), "Copy Constructor check max size");
+    assertm(fvec4.capacity() == svec4.capacity(), "Copy Constructor check capacity");
+
+    ft::vector<B> fvec5(100, B(30));
+    std::vector<B> svec5(100, B(30));
+    fvec5 = fvec4;
+    svec5 = svec4;
+    for (size_t i = 0; i < 100; ++i) {
+
+        assertm(svec5[i].val == fvec5[i].val, "Operator = check value");
+    }
+    assertm(fvec5.size() == svec5.size(), "Operator = check size");
+    assertm(fvec5.max_size() == svec5.max_size(), "Operator =  check max size");
+    assertm(fvec5.capacity() == svec5.capacity(), "Operator = check capacity");
+}
+
+
+void ResizeTest() {
+    ft::vector<int> fvec(10, 1);
+    std::vector<int> svec(10, 1);
+    fvec.resize(22, 2);
+    svec.resize(22, 2);
+    for (size_t i = 0; i < svec.size(); ++i) {
+        assertm(svec[i] == fvec[i], "Resize check value");
+    }
+    assertm(fvec.size() == svec.size(), "Resize check size");
+    assertm(fvec.max_size() == svec.max_size(), "Resize check max size");
+    assertm(fvec.capacity() == svec.capacity(), "Resize check capacity");
+
+    ft::vector<int> fvec2(10, 1);
+    std::vector<int> svec2(10, 1);
+    fvec2.resize(2, 2);
+    svec2.resize(2, 2);
+    for (size_t i = 0; i < svec2.size(); ++i) {
+        assertm(svec2[i] == fvec2[i], "Resize check value");
+    }
+    assertm(fvec2.size() == svec2.size(), "Resize check size");
+    assertm(fvec2.max_size() == svec2.max_size(), "Resize check max size");
+    assertm(fvec2.capacity() == svec2.capacity(), "Resize check capacity");
+    //  std::cout << fvec2.size() << " " << svec2.size() << '\n';
+}
+
+
+void ReserveTest() {
+    std::vector<int> svec;
+    ft::vector<int> fvec;
+    assertm(fvec.size() == svec.size(), "Reserve check size");
+    svec.reserve(1);
+    assertm(fvec.size() == svec.size(), "Reserve check size");
+    svec.reserve(10);
+    assertm(fvec.size() == svec.size(), "Reserve check size");
+    svec.reserve(7);
+    assertm(fvec.size() == svec.size(), "Reserve check size");
+    svec.reserve(14);
+    assertm(fvec.size() == svec.size(), "Reserve check size");
+
+    std::vector<int> svec2(2, 1);
+    ft::vector<int> fvec2(2, 1);
+    svec.reserve(14);
+    fvec.reserve(14);
+    for (size_t i = 0; i < svec2.size();  ++i) {
+        assertm(fvec2[i] == svec2[i], "Reserve check old value");
+    }
+    assertm(fvec.size() == svec.size(), "Reserve check size");
+}
+
+
+void AtTest() {
+    std::vector<int> svec(10);
+    svec.reserve(30);
+    try {
+        svec.at(10)=100;      // vector::at throws an out-of-range
+    }
+    catch (const std::out_of_range& oor) {
+        std::cerr << "Out of Range error: " << oor.what() << '\n';
+    }
+    ft::vector<int> fvec(10);
+    try {
+        fvec.at(20)=100;
+    }
+    catch (const std::out_of_range& oor) {
+        std::cerr << "Out of Range error: " << oor.what() << '\n';
+    }
+
+}
+
+void FrontBackTest(){
+    std::vector<int> svec(10, 1);
+    ft::vector<int> fvec(10, 1);
+    svec.push_back(2);
+    fvec.push_back(2);
+    assertm(fvec.front() == svec.front(), "Front check value");
+    assertm(fvec.back() == svec.back(), "Back check value");
+
+}
+
+void Push_backTest()
+{
+    std::vector<int> svec;
+    std::vector<int> fvec;
+    for (size_t i = 0; i < 10; ++ i) {
+        svec.push_back(i);
+    }
+    for (size_t i = 0; i < 10; ++ i) {
+        fvec.push_back(i);
+    }
+    for (size_t i = 0; i < svec.size();  ++i) {
+        assertm(fvec[i] == svec[i], "Push_back check value");
+    }
+    assertm(fvec.size() == svec.size(), "Push_back check size");
+    assertm(fvec.capacity() == svec.capacity(), "Push_back check size");
+
+    std::vector<int> svec2(1);
+    std::vector<int> fvec2(1);
+    for (size_t i = 0; i < 10; ++ i) {
+        svec2.push_back(i);
+    }
+    for (size_t i = 0; i < 10; ++ i) {
+        fvec2.push_back(i);
+    }
+    for (size_t i = 0; i < svec2.size();  ++i) {
+        assertm(fvec2[i] == svec2[i], "Push_back check value");
+    }
+    assertm(fvec2.size() == svec2.size(), "Push_back check size");
+    assertm(fvec2.capacity() == svec2.capacity(), "Push_back check size");
+}
+
+void AssignTest() {
+    std::vector<int> svec;
+    ft::vector<int> fvec;
+    std::vector<int> tmp;
+    for (size_t i = 0; i < 10; i++)
+    {
+        tmp.push_back(i * 10);
+    }
+    svec.assign(tmp.begin(), tmp.end());
+    fvec.assign(tmp.begin(), tmp.end());
+
+    for (size_t i = 0; i < svec.size(); ++i) {
+        assertm(fvec[i] == svec[i], "Assign Iterator check value");
+    }
+
+    std::vector<int> svec2(12, 2);
+    ft::vector<int> fvec2(12, 2);
+    svec2.assign(13, 1);
+    fvec2.assign(13, 1);
+
+    for (size_t i = 0; i < svec2.size(); ++i) {
+        assertm(fvec2[i] == svec2[i], "Assign fill check value");
+        // std::cout << svec2[i] << '\n';
+        // std::cout << fvec2[i] << '\n';
+    }
+    assertm(fvec2.size() == svec2.size(), "Assign fill check size");
+    assertm(fvec2.capacity() == svec2.capacity(), "Assign fill check size");
+    std::cout << svec2.size() << ' ' << svec2.capacity() << '\n';
+    std::cout << fvec2.size() << ' ' << fvec2.capacity() << '\n';
+
+    int myints[] = {1776,7,4};
+    std::vector<int> svec3;
+    ft::vector<int> fvec3;
+    svec3.assign(myints,myints+3);
+    fvec3.assign(myints,myints+3);
+    for (size_t i = 0; i < svec3.size(); ++i) {
+        assertm(fvec3[i] == svec3[i], "Assign fill check value");
+        std::cout << svec3[i] << '\n';
+        std::cout << fvec3[i] << '\n';
+    }
+}
+
+
+void IteratorTest() {
+    std::vector<int> svec(10, 2);
+    ft::vector<int> fvec(10, 2);
+    std::vector<int>::iterator sit = svec.begin();
+    ft::vector<int>::iterator fit = fvec.begin();
+    for (; sit != svec.end(); ++sit) {
+        std::cout << *sit << ' ';
+    }
+    std::cout << std::endl;
+    for (; fit != fvec.end(); ++fit) {
+        std::cout << *fit << ' ';
+    }
+    std::cout << std::endl;
+
+    std::vector<int> svec2(svec.begin(), svec.end());
+    ft::vector<int> fvec2(fvec.begin(), fvec.end());
+    std::vector<int>::iterator sit2 = svec2.begin();
+    ft::vector<int>::iterator fit2 = fvec2.begin();
+    for (; sit2 != svec2.end(); ++sit2) {
+        std::cout << *sit2 << ' ';
+    }
+    std::cout << std::endl;
+    for (; fit2 != fvec2.end(); ++fit2) {
+        std::cout << *fit2 << ' ';
+    }
+    std::cout << std::endl;
+
+
+    {
+        ft::vector<int> vec(100, 10);
+        ft::vector<int>::iterator iter = vec.begin();
+        ft::vector<int>::const_iterator const_iter (vec.end());
+
+
+        // const_iter = iter;
+        // iter - const_iter;
+
+
+        // iter = const_iter;  //не должно работать
+    }
+
+
+}
+
+
+void EraseTest() {
+    std::vector<int> svec;
+    ft::vector<int> fvec;
+
+    for (int i = 0; i < 10; ++i) {
+        svec.push_back(i);
+        fvec.push_back(i);
+    }
+    std::vector<int>::iterator it = svec.erase(svec.begin());
+    it = svec.erase(svec.end() - 1);
+    std::cout << *it << std::endl;
+    ft::vector<int>::iterator it2 = fvec.erase(fvec.begin());
+    it2 = fvec.erase(fvec.end() - 1);
+    std::cout << *it2 << std::endl;
+    for (size_t i = 0; i < svec.size(); ++i) {
+        std::cout << svec[i] << ' ';
+    }
+    std::cout << std::endl;
+    for (size_t i = 0; i < fvec.size(); ++i) {
+        std::cout << fvec[i] << ' ';
+    }
+    std::cout << std::endl;
+
+
+    for (int i = 10; i < 20; ++i) {
+        svec.push_back(i);
+        fvec.push_back(i);
+    }
+
+    it = svec.erase(svec.begin() + 5, svec.begin() + 10);
+    std::cout << *it << std::endl;
+    it2 = fvec.erase(fvec.begin() + 5, fvec.begin() + 10);
+    std::cout << *it2 << std::endl;
+    for (size_t i = 0; i < svec.size(); ++i) {
+        std::cout << svec[i] << ' ';
+    }
+    std::cout << std::endl;
+    for (size_t i = 0; i < fvec.size(); ++i) {
+        std::cout << fvec[i] << ' ';
+    }
+    std::cout << std::endl;
+    it = svec.erase(svec.begin() + 5, svec.end());
+    std::cout << *it << std::endl;
+    it2 = fvec.erase(fvec.begin() + 5, fvec.end());
+    std::cout << *it2 << std::endl;
+}
+
+
+void InsertTest() {
+    std::vector<int> svec;
+    ft::vector<int> fvec;
+
+    svec.insert(svec.begin(), 0);
+    fvec.insert(fvec.begin(), 0);
+    std::cout << svec.capacity() << ' ' << svec.size() << std::endl;
+    std::cout << fvec.capacity() << ' ' << fvec.size() << std::endl;
+    for (int i = 1; i < 10; ++i) {
+        svec.push_back(i);
+        fvec.push_back(i);
+    }
+
+    std::vector<int>::iterator it = svec.insert(svec.end() - 5, 60);
+    ft::vector<int>::iterator it2 = fvec.insert(fvec.end() - 5, 60);
+
+    std::cout << *it << ' ' << *it2 << std::endl;
+    for (size_t i = 0; i < svec.size(); ++i) {
+        std::cout << svec[i] << ' ';
+    }
+    std::cout << std::endl;
+    for (size_t i = 0; i < fvec.size(); ++i) {
+        std::cout << fvec[i] << ' ';
+    }
+    std::cout << std::endl;
+
+    std::cout << svec.capacity() << ' ' << svec.size() << std::endl;
+    std::cout << fvec.capacity() << ' ' << fvec.size() << std::endl;
+
+    svec.insert(svec.begin() + 5, 25, 10);
+    fvec.insert(fvec.begin() + 5, 25, 10);
+    for (size_t i = 0; i < svec.size(); ++i) {
+        std::cout << svec[i] << ' ';
+    }
+    std::cout << std::endl;
+    for (size_t i = 0; i < fvec.size(); ++i) {
+        std::cout << fvec[i] << ' ';
+    }
+    std::cout << std::endl;
+    std::cout << std::endl;
+
+    std::vector<int> svec3;
+    ft::vector<int> fvec3;
+
+    fvec3.assign(1000, 1);
+    svec3.assign(1000, 1);
+    fvec3.begin();
+    std::cout << fvec3.size() << ' ' << fvec3.capacity() << std::endl;
+    fvec3.insert(fvec3.begin(), 4200, 2);
+    svec3.insert(svec3.begin(), 4200, 2);
+    for (size_t i = 0; i < svec3.size(); ++i) {
+        assertm(svec3[i] == fvec3[i], "insert fill check value");
+    }
+    std::vector<int> svec2;
+    ft::vector<int> fvec2;
+
+    svec2.insert(svec2.begin(), svec.begin(), svec.end());
+    fvec2.insert(fvec2.begin(), fvec.begin(), fvec.end());
+    for (size_t i = 0; i < svec2.size(); ++i) {
+        std::cout << svec2[i] << ' ';
+    }
+    std::cout << std::endl;
+    for (size_t i = 0; i < fvec2.size(); ++i) {
+        std::cout << fvec2[i] << ' ';
+    }
+    std::cout << std::endl;
+
+    {
+        ft::vector<int> f_vec(1, 1);
+        f_vec.insert(f_vec.begin(), 200);
+        std::vector<int> s_vec(1, 1);
+        s_vec.insert(s_vec.begin(), 200);
+        assertm(f_vec.size() == s_vec.size(), "Insert check size");
+        for (size_t i = 0; i < f_vec.size(); ++i) {
+            assertm(f_vec[i] == s_vec[i], "Insert check value");
+        }
+    }
+}
+
+void rbeginTest() {
+    ft::vector<int> f_vec;
+    for (size_t i = 0; i < 10; ++i) {
+        f_vec.push_back(i);
+    }
+
+    std::vector<int> s_vec;
+    for (size_t i = 0; i < 10; ++i) {
+        s_vec.push_back(i);
+    }
+    for (ft::vector<int>::reverse_iterator it = f_vec.rbegin(); it != f_vec.rend(); ++it) {
+        std::cout << *it;
+    }
+    std::cout << std::endl;
+    for (std::vector<int>::reverse_iterator it = s_vec.rbegin(); it != s_vec.rend(); ++it) {
+        std::cout << *it;
+    }
+    std::cout << std::endl;
+}
+
+
+void BeginEndTest() {
+    ft::vector<int> f_vec;
+    for (size_t i = 0; i < 10; ++i) {
+        f_vec.push_back(i);
+    }
+
+    std::vector<int> s_vec;
+    for (size_t i = 0; i < 10; ++i) {
+        s_vec.push_back(i);
+    }
+    for (ft::vector<int>::iterator it = f_vec.begin(); it != f_vec.end(); ++it) {
+        std::cout << *it;
+    }
+    std::cout << std::endl;
+    for (std::vector<int>::iterator it = s_vec.begin(); it != s_vec.end(); ++it) {
+        std::cout << *it;
+    }
+    std::cout << std::endl;
+}
+
+int main()
+{
+    TypedefTest();
+    std::cout << "Typedef test OK\n";
+    ConstructorTest();
+    std::cout << "Constructor test OK\n";
+    ResizeTest();
+    std::cout << "Resize test OK\n";
+    ReserveTest();
+    std::cout << "Reserve test OK\n";
+    AtTest();
+    std::cout << "at test OK\n";
+    FrontBackTest();
+    std::cout << "FrontBackTest OK\n";
+    Push_backTest();
+    std::cout << "Push_backTest OK\n";
+    AssignTest();
+    std::cout << "AssignTest OK\n";
+    IteratorTest();
+    std::cout << "IteratorTest OK\n";
+    EraseTest();
+    std::cout << "EraseTest OK\n";
+    InsertTest();
+    std::cout << "InsertTest OK\n";
+    rbeginTest();
+    std::cout << "rbeginTest OK\n";
+    BeginEndTest();
+    std::cout << "BeginEndTest OK\n";
+    return (0);
 }
