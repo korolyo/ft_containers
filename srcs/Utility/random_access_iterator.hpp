@@ -39,7 +39,7 @@ namespace ft {
         }
 
         reference &operator*() {
-            return (*_position);
+            return *_position;
         }
 
         pointer operator->() const {

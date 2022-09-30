@@ -24,8 +24,8 @@ void TypedefTest() {
 
 class A {
 private:
-    A(const A &a){val = a.val;}
 public:
+    A(const A &a){val = a.val;}
     int val;
     A() {
         val = 1;

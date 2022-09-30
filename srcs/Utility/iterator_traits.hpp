@@ -44,13 +44,12 @@ namespace ft {
         typedef std::random_access_iterator_tag iterator_category;
     };
 
-    template<class InputIterator>
-    typename iterator_traits<InputIterator>::difference_type
-    distance(InputIterator first, InputIterator last) {
-        size_t distance = 0;
-        for (; first != last; ++first)
-            ++distance;
-        return distance;
+    template < class Iter >
+    ptrdiff_t distance( Iter first, Iter last )
+    {
+        ptrdiff_t	len(0);
+        for ( Iter i = first; i != last; ++i, ++len ) {}
+        return ( len );
     }
 }
 

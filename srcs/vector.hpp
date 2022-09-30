@@ -1,8 +1,8 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
-# include <algorithm>
 # include <memory>
+# include <algorithm>
 # include <cstddef>
 # include <tgmath.h>
 # include <iostream>
@@ -32,14 +32,8 @@ namespace ft {
         typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
         // Member functions
-        vector() {
-            _sz = 0;
-            _cap = 0;
-            _alloc = Allocator();
-            _arr = nullptr;
-        }
 
-        explicit vector(const Allocator &alloc) {
+        explicit vector(const Allocator &alloc = allocator_type()) {
             _alloc = Allocator(alloc);
             _cap = 0;
             _sz = 0;
@@ -58,9 +52,11 @@ namespace ft {
                 _alloc = alloc;
                 if (count == 0)
                     _arr = nullptr;
-                _arr = _alloc.allocate(count);
-                for (size_type i = 0; i < count; i++) {
-                    _alloc.construct(_arr + i, value);
+                else {
+                    _arr = _alloc.allocate(count);
+                    for (size_type i = 0; i < count; i++) {
+                        _alloc.construct(_arr + i, value);
+                    }
                 }
             }
         }
@@ -263,94 +259,82 @@ namespace ft {
         }
 
         iterator insert(iterator pos, const T &value) {
-            size_type dist = pos - begin();
+            size_type idx = ft::distance(begin(), pos);
             if (_sz < _cap) {
-                for (iterator it = end(); it != pos - 1; --it) {
-                    _alloc.construct(&(*pos), value);
-                }
-                _alloc.construct(&(*pos), value);
+                for (size_type i = _sz; i > idx; --i)
+                    _arr[i] = _arr[i - 1];
+                _arr[idx] = value;
                 ++_sz;
             } else {
-                value_type *tmp_data = _alloc.allocate(_cap ? _cap *= 2 : 1);
+                size_type capacity = ((_cap + 1 > _cap * 10) \
+ ? _cap + 1 : _cap * 10);
+                capacity = !capacity ? 1 : capacity;
+                vector tmp(capacity);
                 size_type i = 0;
-                for (iterator it = begin(); it != end(); ++it) {
-                    if (it == pos) {
-                        _alloc.construct(tmp_data + i, value);
-                        ++i;
-                    }
-                    _alloc.construct(tmp_data + i, *it);
-                    _alloc.destroy(&(*it));
-                    ++i;
-                }
-                _alloc.deallocate(_arr, _cap);
-                _arr = tmp_data;
-                ++_sz;
+                for (; i < idx; ++i)
+                    tmp._arr[i] = _arr[i];
+                tmp._arr[i++] = value;
+                for (; i < _sz + 1; ++i)
+                    tmp._arr[i] = _arr[i - 1];
+                this->swap(tmp);
+                _sz = i;
+                if (!_cap)
+                    _cap += 1;
             }
-            return begin() + dist;
+            return (begin() + idx);
         }
 
         void insert(iterator pos, size_type count, const T &value) {
-            if (_sz + count > _cap) {
-                if (_sz + count >= _cap * 2)
-                    _cap = _sz + count;
-                else
-                    _cap *= 2;
+            size_type idx = ft::distance(begin(), pos);
+            if (_sz + count <= _cap) {
+                for (size_type i = _sz; i > idx; --i)
+                    _arr[i - 1 + count] = _arr[i - 1];
+                for (size_type i = idx; i < idx + count; ++i)
+                    _arr[i] = value;
+                _sz += count;
+            } else {
+                size_type capacity = ((_cap + count > _cap * 10) \
+ ? _cap + count : _cap * 10);
+                capacity = !capacity ? count : capacity;
+                vector tmp(capacity);
+                size_type i = 0;
+                for (; i < idx; ++i)
+                    tmp._arr[i] = _arr[i];
+                for (; i - idx < count; ++i)
+                    tmp._arr[i] = value;
+                for (; i < _sz + count; ++i)
+                    tmp._arr[i] = _arr[i - count];
+                this->swap(tmp);
+                _sz = i;
             }
-            value_type *tmp_data = _alloc.allocate(_cap);
-            value_type *p = tmp_data;
-            for (int i = 0; begin() + i < pos; ++i) {
-                _alloc.construct(tmp_data, *(begin() + i));
-                ++tmp_data;
-                _alloc.destroy(&(*(begin() + i)));
-            }
-            for (size_type i = 0; i < count; ++i) {
-                _alloc.construct(tmp_data, value);
-                ++tmp_data;
-            }
-            for (int i = 0; pos + i < end(); ++i) {
-                _alloc.construct(tmp_data, *(pos + i));
-                ++tmp_data;
-                _alloc.destroy(&(*(pos * i)));
-            }
-            _alloc.deallocate(&(*begin()), _sz);
-            _arr = p;
-            _sz += count;
         }
 
         template<class InputIt>
-        void insert(iterator pos,
-                    InputIt first,
-                    InputIt Last,
-                    typename ft::enable_if<!ft::is_integral<InputIt>::value>::type * = 0) {
-            size_type n = static_cast<size_type>(ft::distance(begin(), pos));
-            size_type distance = static_cast<size_type>(ft::distance(begin(), pos));
-            if (pos > end() || pos < begin())
-                throw std::range_error("Index Error");
-            value_type *tmp_data = _alloc.allocate(n);
-            try {
-                for (size_type i = 0; i < n; ++i)
-                    _alloc.destroy(tmp_data + i, first++);
+        void insert(iterator pos, typename enable_if<!is_integral<InputIt>::value, InputIt>::type first, InputIt last) {
+            size_type idx = ft::distance<iterator>(begin(), pos);
+            size_type count = ft::distance<InputIt>(first, last);
+            if (_sz + count <= _cap) {
+                for (size_type i = _sz; i > idx; --i)
+                    _arr[i - 1 + count] = _arr[i - 1];
+                InputIt it = first;
+                for (size_type i = idx; i < idx + count; ++i, ++it)
+                    _arr[i] = *(it);
+                _sz += count;
+            } else {
+                size_type capacity = (_cap + count > _cap * 10 \
+ ? _cap + count : _cap * 10);
+                capacity = !capacity ? count : capacity;
+                vector tmp(capacity);
+                size_type i = 0;
+                for (; i < idx; ++i)
+                    tmp._arr[i] = _arr[i];
+                for (; i - idx < count; ++i, ++first)
+                    tmp._arr[i] = *(first);
+                for (; i < _sz + count; ++i)
+                    tmp._arr[i] = _arr[i - count];
+                this->swap(tmp);
+                _sz = i;
             }
-            catch (...) {
-                for (size_type i = 0; tmp_data + i != 0 && i < n; ++i)
-                    _alloc.destroy(tmp_data + i);
-                _alloc.deallocate(tmp_data, n);
-                throw std::runtime_error("Error");
-            }
-            if (_cap == _sz && _cap)
-                reserve(_cap * 2);
-            if (_cap < _sz + n)
-                reserve(_sz + n);
-            for (size_type i = 0; _sz - i != distance; ++i) {
-                _alloc.construct(_arr + _sz - 1 - i + n, _arr[_sz - i + 1]);
-                _alloc.destroy(_arr + _sz - i - 1);
-            }
-            for (size_type i = 0; i < n; ++i) {
-                _alloc.construct(_arr + distance + i, tmp_data[i]);
-                _alloc.destroy(tmp_data + i);
-                ++_sz;
-            }
-            _alloc.deallocate(tmp_data, n);
         }
 
         iterator erase(iterator pos) {
